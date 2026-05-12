@@ -1,0 +1,40 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: hsu-alumni-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build:
+      context: ./backend
+    container_name: hsu-alumni-backend
+    restart: unless-stopped
+    environment:
+      - DJANGO_DEBUG=1
+      - DJANGO_SECRET_KEY=dev-secret-key
+      - MONGO_URI=mongodb://mongo:27017/alumni_db
+      - MONGO_DB=alumni_db
+      - MONGO_COLLECTION=landing_pages
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: hsu-alumni-frontend
+    restart: unless-stopped
+    environment:
+      - VITE_API_BASE=http://localhost:8000
+    ports:
+      - "3456:3456"
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:
