@@ -18,7 +18,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    command: npm run dev -- --host 0.0.0.0 --port 5173
+    command: npm run dev -- --host 0.0.0.0 --port 3456
     working_dir: /app
     depends_on:
       - backend
@@ -26,7 +26,7 @@ services:
       - ./frontend:/app
       - frontend_node_modules:/app/node_modules
     ports:
-      - "5173:5173"
+      - "3456:3456"
     environment:
       VITE_API_PROXY_TARGET: http://backend:8000
 

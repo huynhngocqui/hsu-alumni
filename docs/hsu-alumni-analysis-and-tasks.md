@@ -275,7 +275,7 @@ docker compose up --build
 ```
 
 Ket qua mong doi:
-- Frontend: `http://localhost:5173`
+- Frontend: `http://localhost:3456`
 - Backend health: `http://127.0.0.1:8000/api/health/`
 
 ## 9. Ghi Chu
