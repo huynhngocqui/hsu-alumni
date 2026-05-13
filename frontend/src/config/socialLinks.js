@@ -1,0 +1,38 @@
+export const socialLinks = [
+  {
+    id: 'social-facebook',
+    label: 'Facebook',
+    href: 'https://facebook.com/hoasenuni',
+    external: true,
+    target: '_blank',
+    rel: 'noreferrer noopener',
+    icon: 'facebook',
+  },
+  {
+    id: 'social-youtube',
+    label: 'YouTube',
+    href: 'https://www.youtube.com/hoasenuni',
+    external: true,
+    target: '_blank',
+    rel: 'noreferrer noopener',
+    icon: 'youtube',
+  },
+  {
+    id: 'social-tiktok',
+    label: 'TikTok',
+    href: 'https://www.tiktok.com/@hoasen.university',
+    external: true,
+    target: '_blank',
+    rel: 'noreferrer noopener',
+    icon: 'tiktok',
+  },
+  {
+    id: 'social-zalo',
+    label: 'Zalo',
+    href: 'https://zalo.me/daihochoasen',
+    external: true,
+    target: '_blank',
+    rel: 'noreferrer noopener',
+    icon: 'zalo',
+  },
+];

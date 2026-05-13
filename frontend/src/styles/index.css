@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color: #102345;
+  background: linear-gradient(180deg, #f4f8fe 0%, #ffffff 26%, #f8fbff 100%);
+  font-family: 'Be Vietnam Pro', 'Segoe UI', sans-serif;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f4f8fe 0%, #ffffff 30%, #f8fbff 100%);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-brand-ink;
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+
+  button {
+    @apply transition duration-200 ease-out;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-[28px] border border-slate-200/85 bg-white shadow-panel;
+  }
+
+  .page-shell {
+    @apply mx-auto flex w-full max-w-7xl flex-col gap-10 px-4 py-8 sm:px-6 lg:px-8 lg:py-10;
+  }
+
+  .section-heading {
+    @apply text-2xl font-extrabold tracking-tight text-brand-ink sm:text-3xl lg:text-[2rem];
+  }
+
+  .section-copy {
+    @apply max-w-3xl text-sm leading-7 text-slate-600 sm:text-base;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white shadow-panel transition hover:bg-brand-dark;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-brand/15 bg-white px-5 py-3 text-sm font-semibold text-brand-ink transition hover:border-brand/30 hover:bg-brand-sand;
+  }
+
+  .input-field {
+    @apply w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20;
+  }
+
+  .input-label {
+    @apply mb-2 block text-sm font-medium text-slate-700;
+  }
+}
