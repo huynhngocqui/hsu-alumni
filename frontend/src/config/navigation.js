@@ -1,8 +1,8 @@
 export const utilityNavigation = [
   {
-    id: 'utility-library',
-    label: 'Thư viện',
-    path: 'https://library.hoasen.edu.vn/',
+    id: 'utility-contact',
+    label: 'Hoa Sen 35 năm',
+    path: 'https://www.hoasen.edu.vn/hoa-sen-35-nam/',
     external: true,
     target: '_blank',
     rel: 'noreferrer noopener',
@@ -11,9 +11,9 @@ export const utilityNavigation = [
     order: 1,
   },
   {
-    id: 'utility-contact',
-    label: 'Liên hệ',
-    path: 'https://www.hoasen.edu.vn/lien-he/',
+    id: 'utility-library',
+    label: 'Cổng thông tin sinh viên',
+    path: 'htttsv.hoasen.edu.vn/',
     external: true,
     target: '_blank',
     rel: 'noreferrer noopener',
@@ -55,7 +55,6 @@ export const mainNavigation = [
         children: [],
         activeMatch: ['/gioi-thieu/dinh-huong-hoat-dong'],
         order: 1,
-        description: 'Trang nội dung về định hướng, sứ mệnh và cách HSU Alumni kết nối cộng đồng.',
       },
     ],
   },
@@ -79,7 +78,6 @@ export const mainNavigation = [
         children: [],
         activeMatch: [],
         order: 1,
-        description: 'External link tới khu vực Tin tức chính thức của Đại học Hoa Sen.',
       },
       {
         id: 'nav-events',
@@ -91,7 +89,6 @@ export const mainNavigation = [
         children: [],
         activeMatch: [],
         order: 2,
-        description: 'External link tới lịch sự kiện chính thức của Đại học Hoa Sen.',
       },
     ],
   },
@@ -115,7 +112,6 @@ export const mainNavigation = [
         children: [],
         activeMatch: ['/cong-dong-alumni/chinh-sach-alumni'],
         order: 1,
-        description: 'Trang chính sách, quyền lợi và nguyên tắc tham gia mạng lưới Alumni.',
       },
       {
         id: 'nav-community-board',
@@ -127,7 +123,6 @@ export const mainNavigation = [
         children: [],
         activeMatch: ['/cong-dong-alumni/ban-lien-lac'],
         order: 2,
-        description: 'Thông tin đầu mối, ban liên lạc và các kênh kết nối chính thức.',
       },
       {
         id: 'nav-community-outstanding',
@@ -139,7 +134,6 @@ export const mainNavigation = [
         children: [],
         activeMatch: ['/cong-dong-alumni/cuu-sinh-vien-tieu-bieu'],
         order: 3,
-        description: 'Danh mục gương mặt Alumni tiêu biểu và câu chuyện truyền cảm hứng.',
       },
       {
         id: 'nav-community-success',
@@ -151,7 +145,6 @@ export const mainNavigation = [
         children: [],
         activeMatch: ['/cong-dong-alumni/cau-chuyen-thanh-cong'],
         order: 4,
-        description: 'Nơi kể lại những hành trình nghề nghiệp và tác động tích cực từ Alumni.',
       },
       {
         id: 'nav-community-gallery',
@@ -163,7 +156,6 @@ export const mainNavigation = [
         children: [],
         activeMatch: ['/cong-dong-alumni/thu-vien-hinh-anh'],
         order: 5,
-        description: 'Album hình ảnh hoạt động, sự kiện và dấu ấn cộng đồng Alumni.',
       },
     ],
   },
@@ -187,7 +179,6 @@ export const mainNavigation = [
         children: [],
         activeMatch: [],
         order: 1,
-        description: 'External link tới nền tảng career chính thức của hệ sinh thái HSU.',
       },
       {
         id: 'nav-career-webinars',
@@ -199,7 +190,6 @@ export const mainNavigation = [
         children: [],
         activeMatch: [],
         order: 2,
-        description: 'External link tới khu vực webinar và tin tức nghề nghiệp.',
       },
       {
         id: 'nav-career-post',
@@ -211,7 +201,6 @@ export const mainNavigation = [
         children: [],
         activeMatch: [],
         order: 3,
-        description: 'External link theo navigation hiện tại; cần stakeholder chốt với module Job nội bộ.',
       },
     ],
   },
@@ -235,7 +224,6 @@ export const mainNavigation = [
         children: [],
         activeMatch: ['/dich-vu-alumni/hoa-sen-coop'],
         order: 1,
-        description: 'Sàn kết nối sản phẩm, dịch vụ và ưu đãi từ cộng đồng Alumni.',
       },
       {
         id: 'nav-services-shop',
@@ -247,7 +235,6 @@ export const mainNavigation = [
         children: [],
         activeMatch: ['/dich-vu-alumni/hoa-sen-shop'],
         order: 2,
-        description: 'Landing page dịch vụ Shop dành cho Alumni, chờ hoàn thiện nội dung nghiệp vụ.',
       },
       {
         id: 'nav-services-courses',
@@ -259,7 +246,6 @@ export const mainNavigation = [
         children: [],
         activeMatch: ['/dich-vu-alumni/hoa-sen-courses'],
         order: 3,
-        description: 'Landing page ưu đãi học tập và lộ trình phát triển dành cho Alumni.',
       },
       {
         id: 'nav-services-library',
@@ -271,7 +257,6 @@ export const mainNavigation = [
         children: [],
         activeMatch: [],
         order: 4,
-        description: 'External link tới thư viện chính thức của Hoa Sen University.',
       },
       {
         id: 'nav-services-facilities',
@@ -283,7 +268,6 @@ export const mainNavigation = [
         children: [],
         activeMatch: [],
         order: 5,
-        description: 'External link tới thông tin hỗ trợ cơ sở vật chất và trải nghiệm học tập.',
       },
     ],
   },

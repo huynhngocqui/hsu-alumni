@@ -1,11 +1,21 @@
 export const siteMeta = {
   siteName: 'HSU Alumni',
-  universityName: 'Đại học Hoa Sen',
-  brandStatement: 'Tôn trọng sự khác biệt',
+  universityName: 'Đại học Hoa Sen - HSU',
   primaryHotlineLabel: '028 7300 7272',
   primaryHotlineHref: 'tel:02873007272',
+  brandAssets: {
+    navbar: {
+      defaultLogo: '/branding/navbar/logo-default.png',
+      compactLogo: '/branding/navbar/logo-scrolled.png',
+      mobileLogo: '/branding/navbar/logo-default.png',
+    },
+    footer: {
+      brandLogo: '/branding/footer/footer-brand.png',
+      background: '/branding/footer/footer-background.jpg',
+    },
+  },
   footerReferenceNote:
-    'Nội dung tham khảo từ website HSU Alumni, cần stakeholder xác nhận trước khi triển khai chính thức.',
+    '',
   heroReferenceNote:
-    'Phong cách visual được dựng mới theo tinh thần HSU Alumni; logo, hình ảnh và bộ nhận diện chính thức cần lấy từ stakeholder.',
+    '',
 };

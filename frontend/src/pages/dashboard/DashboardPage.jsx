@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import PageLayout from '../../components/common/PageLayout';
 import EmptyState from '../../components/common/EmptyState';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -17,15 +18,12 @@ function DashboardPage() {
   const { user } = useAuth();
 
   return (
-    <div className="page-shell">
-      <section className="panel grid gap-6 px-6 py-8 lg:grid-cols-[1.2fr_0.8fr] lg:px-10">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand">Dashboard</p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight">Xin chào, {user?.full_name || 'Alumni'}.</h1>
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600">
-            Dashboard đã sẵn sàng để ghép dữ liệu hồ sơ, danh sách gợi ý Co-op/Job và thông báo. Ở giai đoạn hiện tại, hệ thống ưu tiên hoàn thiện hồ sơ để phục vụ matching.
-          </p>
-        </div>
+    <PageLayout
+      breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Dashboard' }]}
+      eyebrow="Dashboard"
+      title={`Xin chào, ${user?.full_name || 'Alumni'}.`}
+      description="Dashboard đã sẵn sàng để ghép dữ liệu hồ sơ, danh sách gợi ý Co-op/Job và thông báo. Ở giai đoạn hiện tại, hệ thống ưu tiên hoàn thiện hồ sơ để phục vụ matching."
+      aside={
         <div className="rounded-[28px] bg-brand-sand p-6">
           <h2 className="text-lg font-semibold">Checklist cá nhân</h2>
           <ul className="mt-4 space-y-3 text-sm text-slate-600">
@@ -37,8 +35,8 @@ function DashboardPage() {
             Cập nhật hồ sơ ngay
           </Link>
         </div>
-      </section>
-
+      }
+    >
       <section className="grid gap-6 lg:grid-cols-2">
         {matchSections.map((section) => (
           <div key={section.title} className="space-y-4">
@@ -55,7 +53,7 @@ function DashboardPage() {
           </div>
         ))}
       </section>
-    </div>
+    </PageLayout>
   );
 }
 

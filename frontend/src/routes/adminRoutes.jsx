@@ -15,6 +15,7 @@ export const adminRoutes = [
             path: 'admin/users',
             element: (
               <FeatureShellPage
+                breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Admin', to: '/admin' }, { label: 'Quản lý tài khoản Alumni' }]}
                 eyebrow="Admin"
                 title="Quản lý tài khoản Alumni"
                 description="Module quản trị tài khoản sẽ phục vụ activate/deactivate người dùng, xem trạng thái xác thực và xử lý các hồ sơ pending."
@@ -26,6 +27,7 @@ export const adminRoutes = [
             path: 'admin/content/articles',
             element: (
               <FeatureShellPage
+                breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Admin', to: '/admin' }, { label: 'Quản lý bài viết CMS' }]}
                 eyebrow="Admin"
                 title="Quản lý bài viết CMS"
                 description="Khu vực quản trị bài viết Tin tức, Sự kiện, Career Webinars và các trang nội dung cộng đồng."
@@ -37,6 +39,7 @@ export const adminRoutes = [
             path: 'admin/content/gallery',
             element: (
               <FeatureShellPage
+                breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Admin', to: '/admin' }, { label: 'Duyệt thư viện ảnh' }]}
                 eyebrow="Admin"
                 title="Duyệt thư viện ảnh"
                 description="Module duyệt link Google Drive do Alumni đóng góp trước khi hiển thị lên gallery công khai."
@@ -48,6 +51,7 @@ export const adminRoutes = [
             path: 'admin/tags',
             element: (
               <FeatureShellPage
+                breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Admin', to: '/admin' }, { label: 'Quản lý taxonomy tags' }]}
                 eyebrow="Admin"
                 title="Quản lý taxonomy tags"
                 description="Taxonomy dùng chung cho Profile, Co-op và Job sẽ được quản lý tập trung tại đây."

@@ -5,6 +5,7 @@ import { listTags } from '../../api/tags';
 import EmptyState from '../../components/common/EmptyState';
 import ErrorState from '../../components/common/ErrorState';
 import LoadingState from '../../components/common/LoadingState';
+import PageLayout from '../../components/common/PageLayout';
 import { useAuth } from '../../hooks/useAuth';
 import { formatDate } from '../../utils/formatDate';
 
@@ -76,61 +77,63 @@ function JobListPage() {
   }
 
   return (
-    <div className="page-shell">
-      <section className="panel px-6 py-8 lg:px-10">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand">Việc làm & Kết nối</p>
-            <h1 className="mt-3 text-4xl font-semibold tracking-tight">Hoa Sen Job</h1>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-              Cổng việc làm kết nối doanh nghiệp Alumni với sinh viên và cựu sinh viên. Tìm kiếm theo tên vị trí, công ty hoặc category tag.
-            </p>
-          </div>
-          {isAuthenticated ? (
-            <Link to="/viec-lam-ket-noi/dang-tin-tuyen-dung" className="btn-primary">
-              Đăng tin tuyển dụng
-            </Link>
-          ) : null}
-        </div>
-
-        <form className="mt-8 flex flex-col gap-4 lg:flex-row" onSubmit={handleSearch}>
-          <input
-            className="input-field"
-            value={searchInput}
-            onChange={(event) => setSearchInput(event.target.value)}
-            placeholder="Tìm theo tên công việc, vị trí hoặc doanh nghiệp"
-          />
-          <button type="submit" className="btn-primary lg:min-w-40">
-            Tìm kiếm
-          </button>
-        </form>
-
-        {tags.length ? (
-          <div className="mt-4 flex flex-wrap gap-2">
-            <button
-              type="button"
-              className={`rounded-full px-4 py-2 text-sm font-semibold ${!selectedTag ? 'bg-brand text-white' : 'bg-brand-sand text-brand'}`}
-              onClick={() => setSelectedTag('')}
-            >
-              Tất cả
+    <PageLayout
+      breadcrumbItems={[
+        { label: 'Trang chủ', to: '/' },
+        { label: 'Việc làm & Kết nối' },
+        { label: 'Hoa Sen Job' },
+      ]}
+      eyebrow="Việc làm & Kết nối"
+      title="Hoa Sen Job"
+      description="Cổng việc làm kết nối doanh nghiệp Alumni với sinh viên và cựu sinh viên. Tìm kiếm theo tên vị trí, công ty hoặc category tag."
+      actions={
+        isAuthenticated ? (
+          <Link to="/viec-lam-ket-noi/dang-tin-tuyen-dung" className="btn-primary">
+            Đăng tin tuyển dụng
+          </Link>
+        ) : null
+      }
+      panelContent={
+        <>
+          <form className="flex flex-col gap-4 lg:flex-row" onSubmit={handleSearch}>
+            <input
+              className="input-field"
+              value={searchInput}
+              onChange={(event) => setSearchInput(event.target.value)}
+              placeholder="Tìm theo tên công việc, vị trí hoặc doanh nghiệp"
+            />
+            <button type="submit" className="btn-primary lg:min-w-40">
+              Tìm kiếm
             </button>
-            {tags.map((tag) => {
-              const active = selectedTag === tag.name;
-              return (
-                <button
-                  key={tag.id}
-                  type="button"
-                  className={`rounded-full px-4 py-2 text-sm font-semibold ${active ? 'bg-brand text-white' : 'bg-brand-sand text-brand'}`}
-                  onClick={() => setSelectedTag(tag.name)}
-                >
-                  {tag.name}
-                </button>
-              );
-            })}
-          </div>
-        ) : null}
-      </section>
+          </form>
 
+          {tags.length ? (
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                type="button"
+                className={`rounded-full px-4 py-2 text-sm font-semibold ${!selectedTag ? 'bg-brand text-white' : 'bg-brand-sand text-brand'}`}
+                onClick={() => setSelectedTag('')}
+              >
+                Tất cả
+              </button>
+              {tags.map((tag) => {
+                const active = selectedTag === tag.name;
+                return (
+                  <button
+                    key={tag.id}
+                    type="button"
+                    className={`rounded-full px-4 py-2 text-sm font-semibold ${active ? 'bg-brand text-white' : 'bg-brand-sand text-brand'}`}
+                    onClick={() => setSelectedTag(tag.name)}
+                  >
+                    {tag.name}
+                  </button>
+                );
+              })}
+            </div>
+          ) : null}
+        </>
+      }
+    >
       {(search || activeTagLabel) && (
         <div className="text-sm text-slate-500">
           Bộ lọc hiện tại: {search ? `từ khóa "${search}"` : 'không có từ khóa'}
@@ -177,7 +180,7 @@ function JobListPage() {
           message="Hãy thử đổi từ khóa, thay tag lọc hoặc quay lại sau khi có bài đăng mới."
         />
       )}
-    </div>
+    </PageLayout>
   );
 }
 

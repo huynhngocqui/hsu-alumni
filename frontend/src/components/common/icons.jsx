@@ -53,6 +53,15 @@ export function MenuIcon({ className = 'h-5 w-5' }) {
   );
 }
 
+export function SearchIcon({ className = 'h-4 w-4' }) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden="true">
+      <circle cx="8.75" cy="8.75" r="4.917" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M12.5 12.5 16.25 16.25" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function PhoneIcon({ className = 'h-4 w-4' }) {
   return (
     <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden="true">

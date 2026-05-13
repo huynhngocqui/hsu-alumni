@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../api/auth';
+import AuthPageHeading from '../../components/auth/AuthPageHeading';
 import { useAuth } from '../../hooks/useAuth';
 
 function LoginPage() {
@@ -38,11 +39,11 @@ function LoginPage() {
 
   return (
     <div>
-      <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand">Xác thực</p>
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight">Đăng nhập tài khoản Alumni</h1>
-      <p className="mt-3 text-sm leading-7 text-slate-600">
-        Sử dụng email cá nhân đã đăng ký để truy cập dashboard, hồ sơ và các tính năng matching.
-      </p>
+      <AuthPageHeading
+        eyebrow="Xác thực"
+        title="Đăng nhập tài khoản Alumni"
+        description="Sử dụng email cá nhân đã đăng ký để truy cập dashboard, hồ sơ và các tính năng matching."
+      />
 
       <form className="mt-8 space-y-5" onSubmit={onSubmit}>
         <label className="block">

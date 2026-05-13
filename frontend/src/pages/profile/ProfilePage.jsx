@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { updateCurrentUserProfile } from '../../api/users';
+import PageLayout from '../../components/common/PageLayout';
 import { useAuth } from '../../hooks/useAuth';
 
 function ProfilePage() {
@@ -49,16 +50,17 @@ function ProfilePage() {
   });
 
   return (
-    <div className="page-shell">
+    <PageLayout
+      breadcrumbItems={[
+        { label: 'Trang chủ', to: '/' },
+        { label: 'Dashboard', to: '/dashboard' },
+        { label: 'Hồ sơ cá nhân' },
+      ]}
+      eyebrow="Hồ sơ cá nhân"
+      title="Thông tin Alumni"
+      description="Form này là khung đầu tiên cho luồng cập nhật hồ sơ, bao gồm thông tin công việc hiện tại và lĩnh vực quan tâm để phục vụ matching engine."
+    >
       <section className="panel px-6 py-8 lg:px-10">
-        <div className="mb-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand">Hồ sơ cá nhân</p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight">Thông tin Alumni</h1>
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-            Form này là khung đầu tiên cho luồng cập nhật hồ sơ, bao gồm thông tin công việc hiện tại và lĩnh vực quan tâm để phục vụ matching engine.
-          </p>
-        </div>
-
         <form className="grid gap-6 lg:grid-cols-2" onSubmit={onSubmit}>
           <label>
             <span className="input-label">Họ tên</span>
@@ -101,7 +103,7 @@ function ProfilePage() {
           </div>
         </form>
       </section>
-    </div>
+    </PageLayout>
   );
 }
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 import { resetPassword } from '../../api/auth';
+import AuthPageHeading from '../../components/auth/AuthPageHeading';
 
 function ResetPasswordPage() {
   const [searchParams] = useSearchParams();
@@ -29,11 +30,15 @@ function ResetPasswordPage() {
 
   return (
     <div>
-      <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand">Thiết lập mật khẩu</p>
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight">Tạo mật khẩu mới</h1>
-      <p className="mt-3 text-sm leading-7 text-slate-600">
-        Token hiện tại: <span className="font-semibold text-brand-ink">{token ? 'Đã nhận' : 'Thiếu token'}</span>
-      </p>
+      <AuthPageHeading
+        eyebrow="Thiết lập mật khẩu"
+        title="Tạo mật khẩu mới"
+        description="Đặt lại mật khẩu bằng token được gửi qua email để quay lại các luồng Alumni trên hệ thống."
+      >
+        <p className="text-sm leading-7 text-slate-600">
+          Token hiện tại: <span className="font-semibold text-brand-ink">{token ? 'Đã nhận' : 'Thiếu token'}</span>
+        </p>
+      </AuthPageHeading>
 
       <form className="mt-8 space-y-5" onSubmit={onSubmit}>
         <label className="block">

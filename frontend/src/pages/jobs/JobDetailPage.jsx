@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { applyToJob, getJobListing } from '../../api/jobs';
 import ErrorState from '../../components/common/ErrorState';
 import LoadingState from '../../components/common/LoadingState';
+import PageLayout from '../../components/common/PageLayout';
 import { useAuth } from '../../hooks/useAuth';
 import { formatDate } from '../../utils/formatDate';
 
@@ -76,25 +77,18 @@ function JobDetailPage() {
   const canApply = isAuthenticated && user?.id !== listing.owner;
 
   return (
-    <div className="page-shell">
-      <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-        <article className="panel px-6 py-8 lg:px-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand">Hoa Sen Job</p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight">{listing.job_name}</h1>
-          <p className="mt-3 text-lg font-medium text-slate-700">{listing.job_position}</p>
-          <div className="mt-5 flex flex-wrap gap-2">
-            {(listing.category_tags || []).map((tag) => (
-              <span key={tag} className="rounded-full bg-brand-sand px-3 py-1 text-xs font-semibold text-brand">
-                {tag}
-              </span>
-            ))}
-          </div>
-          <p className="mt-6 whitespace-pre-line text-sm leading-8 text-slate-600">
-            {listing.job_description || 'Chưa có mô tả chi tiết cho vị trí này.'}
-          </p>
-        </article>
-
-        <aside className="space-y-6">
+    <PageLayout
+      breadcrumbItems={[
+        { label: 'Trang chủ', to: '/' },
+        { label: 'Việc làm & Kết nối' },
+        { label: 'Hoa Sen Job', to: '/viec-lam-ket-noi/hoa-sen-job' },
+        { label: listing.job_name },
+      ]}
+      eyebrow="Việc làm & Kết nối"
+      title={listing.job_name}
+      description={listing.job_description || 'Chưa có mô tả chi tiết cho vị trí này.'}
+      aside={
+        <div className="space-y-6">
           <div className="panel px-6 py-8">
             <h2 className="text-xl font-semibold">Thông tin tuyển dụng</h2>
             <dl className="mt-5 space-y-4 text-sm text-slate-600">
@@ -147,9 +141,21 @@ function JobDetailPage() {
               </p>
             )}
           </div>
-        </aside>
-      </section>
-    </div>
+        </div>
+      }
+      panelContent={
+        <div>
+          <p className="text-lg font-medium text-slate-700">{listing.job_position}</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {(listing.category_tags || []).map((tag) => (
+              <span key={tag} className="rounded-full bg-brand-sand px-3 py-1 text-xs font-semibold text-brand">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      }
+    />
   );
 }
 

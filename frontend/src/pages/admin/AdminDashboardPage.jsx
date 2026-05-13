@@ -1,3 +1,5 @@
+import PageLayout from '../../components/common/PageLayout';
+
 function AdminDashboardPage() {
   const stats = [
     { label: 'Tài khoản chờ xác thực', value: '0' },
@@ -6,15 +8,12 @@ function AdminDashboardPage() {
   ];
 
   return (
-    <div className="space-y-6">
-      <section className="panel px-6 py-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand">Admin Overview</p>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight">Bảng điều khiển quản trị</h1>
-        <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-          Khung quản trị ban đầu đã sẵn sàng để nối users moderation, CMS article management, gallery moderation và taxonomy tags.
-        </p>
-      </section>
-
+    <PageLayout
+      breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Admin' }, { label: 'Tổng quan' }]}
+      eyebrow="Admin Overview"
+      title="Bảng điều khiển quản trị"
+      description="Khung quản trị ban đầu đã sẵn sàng để nối users moderation, CMS article management, gallery moderation và taxonomy tags."
+    >
       <section className="grid gap-4 md:grid-cols-3">
         {stats.map((stat) => (
           <article key={stat.label} className="panel px-6 py-6">
@@ -23,7 +22,7 @@ function AdminDashboardPage() {
           </article>
         ))}
       </section>
-    </div>
+    </PageLayout>
   );
 }
 

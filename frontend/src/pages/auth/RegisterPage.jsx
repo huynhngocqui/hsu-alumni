@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { registerUser } from '../../api/auth';
+import AuthPageHeading from '../../components/auth/AuthPageHeading';
 
 function RegisterPage() {
   const [status, setStatus] = useState({ type: '', message: '' });
@@ -26,11 +27,11 @@ function RegisterPage() {
 
   return (
     <div>
-      <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand">Đăng ký</p>
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight">Tạo tài khoản Alumni</h1>
-      <p className="mt-3 text-sm leading-7 text-slate-600">
-        Form này là khung đầu tiên cho luồng đăng ký thành viên, bao gồm các trường chính trong BRD để sau đó nối PeopleSoft lookup và validation chi tiết hơn.
-      </p>
+      <AuthPageHeading
+        eyebrow="Đăng ký"
+        title="Tạo tài khoản Alumni"
+        description="Form này là khung đầu tiên cho luồng đăng ký thành viên, bao gồm các trường chính trong BRD để sau đó nối PeopleSoft lookup và validation chi tiết hơn."
+      />
 
       <form className="mt-8 grid gap-5 md:grid-cols-2" onSubmit={onSubmit}>
         <label>

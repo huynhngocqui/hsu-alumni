@@ -5,6 +5,7 @@ import { listTags } from '../../api/tags';
 import EmptyState from '../../components/common/EmptyState';
 import ErrorState from '../../components/common/ErrorState';
 import LoadingState from '../../components/common/LoadingState';
+import PageLayout from '../../components/common/PageLayout';
 import { useAuth } from '../../hooks/useAuth';
 import { formatDate } from '../../utils/formatDate';
 
@@ -76,61 +77,63 @@ function CoopListPage() {
   }
 
   return (
-    <div className="page-shell">
-      <section className="panel px-6 py-8 lg:px-10">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand">Dịch vụ Alumni</p>
-            <h1 className="mt-3 text-4xl font-semibold tracking-tight">Hoa Sen Co-op</h1>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">
-              Khám phá sản phẩm, dịch vụ và ưu đãi được đăng bởi cộng đồng Alumni. Kết quả có thể lọc theo category tag và tìm kiếm theo từ khóa.
-            </p>
-          </div>
-          {isAuthenticated ? (
-            <Link to="/dich-vu-alumni/hoa-sen-coop/dang-moi" className="btn-primary">
-              Đăng Co-op mới
-            </Link>
-          ) : null}
-        </div>
-
-        <form className="mt-8 flex flex-col gap-4 lg:flex-row" onSubmit={handleSearch}>
-          <input
-            className="input-field"
-            value={searchInput}
-            onChange={(event) => setSearchInput(event.target.value)}
-            placeholder="Tìm theo tên sản phẩm, dịch vụ hoặc doanh nghiệp"
-          />
-          <button type="submit" className="btn-primary lg:min-w-40">
-            Tìm kiếm
-          </button>
-        </form>
-
-        {tags.length ? (
-          <div className="mt-4 flex flex-wrap gap-2">
-            <button
-              type="button"
-              className={`rounded-full px-4 py-2 text-sm font-semibold ${!selectedTag ? 'bg-brand text-white' : 'bg-brand-sand text-brand'}`}
-              onClick={() => setSelectedTag('')}
-            >
-              Tất cả
+    <PageLayout
+      breadcrumbItems={[
+        { label: 'Trang chủ', to: '/' },
+        { label: 'Dịch vụ Alumni' },
+        { label: 'Hoa Sen COOP' },
+      ]}
+      eyebrow="Dịch vụ Alumni"
+      title="Hoa Sen COOP"
+      description="Khám phá sản phẩm, dịch vụ và ưu đãi được đăng bởi cộng đồng Alumni. Kết quả có thể lọc theo category tag và tìm kiếm theo từ khóa."
+      actions={
+        isAuthenticated ? (
+          <Link to="/dich-vu-alumni/hoa-sen-coop/dang-moi" className="btn-primary">
+            Đăng Co-op mới
+          </Link>
+        ) : null
+      }
+      panelContent={
+        <>
+          <form className="flex flex-col gap-4 lg:flex-row" onSubmit={handleSearch}>
+            <input
+              className="input-field"
+              value={searchInput}
+              onChange={(event) => setSearchInput(event.target.value)}
+              placeholder="Tìm theo tên sản phẩm, dịch vụ hoặc doanh nghiệp"
+            />
+            <button type="submit" className="btn-primary lg:min-w-40">
+              Tìm kiếm
             </button>
-            {tags.map((tag) => {
-              const active = selectedTag === tag.name;
-              return (
-                <button
-                  key={tag.id}
-                  type="button"
-                  className={`rounded-full px-4 py-2 text-sm font-semibold ${active ? 'bg-brand text-white' : 'bg-brand-sand text-brand'}`}
-                  onClick={() => setSelectedTag(tag.name)}
-                >
-                  {tag.name}
-                </button>
-              );
-            })}
-          </div>
-        ) : null}
-      </section>
+          </form>
 
+          {tags.length ? (
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                type="button"
+                className={`rounded-full px-4 py-2 text-sm font-semibold ${!selectedTag ? 'bg-brand text-white' : 'bg-brand-sand text-brand'}`}
+                onClick={() => setSelectedTag('')}
+              >
+                Tất cả
+              </button>
+              {tags.map((tag) => {
+                const active = selectedTag === tag.name;
+                return (
+                  <button
+                    key={tag.id}
+                    type="button"
+                    className={`rounded-full px-4 py-2 text-sm font-semibold ${active ? 'bg-brand text-white' : 'bg-brand-sand text-brand'}`}
+                    onClick={() => setSelectedTag(tag.name)}
+                  >
+                    {tag.name}
+                  </button>
+                );
+              })}
+            </div>
+          ) : null}
+        </>
+      }
+    >
       {(search || activeTagLabel) && (
         <div className="text-sm text-slate-500">
           Bộ lọc hiện tại: {search ? `từ khóa "${search}"` : 'không có từ khóa'}
@@ -175,7 +178,7 @@ function CoopListPage() {
           message="Hãy thử đổi bộ lọc hoặc quay lại sau khi cộng đồng có thêm bài đăng mới."
         />
       )}
-    </div>
+    </PageLayout>
   );
 }
 

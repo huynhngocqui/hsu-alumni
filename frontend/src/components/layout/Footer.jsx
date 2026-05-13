@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import BrandImage from '../common/BrandImage';
 import { footerConfig } from '../../config/footer';
 import { siteMeta } from '../../config/site';
 import {
@@ -34,16 +35,34 @@ function FooterLink({ link, className, children }) {
 }
 
 function Footer() {
+  const footerBrandLogo = siteMeta.brandAssets?.footer?.brandLogo;
+  const footerBackground = siteMeta.brandAssets?.footer?.background;
+  const footerStyle = footerBackground
+    ? {
+        backgroundImage: `linear-gradient(135deg, rgba(4, 37, 82, 0.96) 0%, rgba(2, 26, 58, 0.94) 48%, rgba(2, 20, 44, 0.96) 100%), url(${footerBackground})`,
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+      }
+    : undefined;
+
   return (
-    <footer className="mt-auto bg-brand-dark text-white">
+    <footer className="mt-auto bg-brand-dark text-white" style={footerStyle}>
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
         <div className="grid gap-8 lg:grid-cols-[1.05fr_1.15fr_0.8fr_0.8fr]">
           <div className="space-y-5">
-            <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/70">{footerConfig.brand.eyebrow}</p>
-              <h2 className="text-3xl font-extrabold uppercase tracking-[0.04em]">{footerConfig.brand.title}</h2>
-              <div className="h-1.5 w-24 rounded-full bg-brand-red" />
-            </div>
+            <BrandImage
+              src={footerBrandLogo}
+              alt={`${footerConfig.brand.title} footer brand`}
+              className="h-auto max-h-[90px] w-auto max-w-full object-contain"
+              fallback={
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/70">{footerConfig.brand.eyebrow}</p>
+                  <h2 className="text-3xl font-extrabold uppercase tracking-[0.04em]">{footerConfig.brand.title}</h2>
+                  <div className="h-1.5 w-24 rounded-full bg-brand-red" />
+                </div>
+              }
+            />
 
             <p className="max-w-md text-sm leading-7 text-white/76">{footerConfig.brand.description}</p>
             <p className="max-w-md text-xs leading-6 text-white/55">{siteMeta.footerReferenceNote}</p>

@@ -17,6 +17,7 @@ export const publicRoutes = [
         path: 'gioi-thieu/dinh-huong-hoat-dong',
         element: (
           <FeatureShellPage
+            breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Giới thiệu' }, { label: 'Định hướng hoạt động' }]}
             eyebrow="Giới thiệu"
             title="Định hướng hoạt động Alumni"
             description="Trang này sẽ dùng để trình bày định hướng hoạt động, sứ mệnh kết nối và chính sách đồng hành cùng Alumni theo nội dung được phê duyệt."
@@ -31,6 +32,7 @@ export const publicRoutes = [
         path: 'cong-dong-alumni/chinh-sach-alumni',
         element: (
           <FeatureShellPage
+            breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Cộng đồng Alumni' }, { label: 'Chính sách Alumni' }]}
             eyebrow="Cộng đồng Alumni"
             title="Chính sách Alumni"
             description="Khu vực công khai để công bố chính sách, quyền lợi và nguyên tắc tham gia mạng lưới Alumni HSU."
@@ -43,6 +45,7 @@ export const publicRoutes = [
         path: 'cong-dong-alumni/ban-lien-lac',
         element: (
           <FeatureShellPage
+            breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Cộng đồng Alumni' }, { label: 'Thông tin Ban liên lạc' }]}
             eyebrow="Cộng đồng Alumni"
             title="Thông tin Ban liên lạc"
             description="Trang tĩnh/CMS cho danh sách Ban liên lạc và thông tin liên hệ chính thức."
@@ -54,6 +57,7 @@ export const publicRoutes = [
         path: 'cong-dong-alumni/cuu-sinh-vien-tieu-bieu',
         element: (
           <FeatureShellPage
+            breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Cộng đồng Alumni' }, { label: 'Cựu sinh viên tiêu biểu' }]}
             eyebrow="Cộng đồng Alumni"
             title="Cựu sinh viên tiêu biểu"
             description="Danh mục nội dung vinh danh Alumni tiêu biểu, làm nền cho listing card và detail page theo slug."
@@ -66,6 +70,7 @@ export const publicRoutes = [
         path: 'cong-dong-alumni/cau-chuyen-thanh-cong',
         element: (
           <FeatureShellPage
+            breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Cộng đồng Alumni' }, { label: 'Câu chuyện thành công' }]}
             eyebrow="Cộng đồng Alumni"
             title="Câu chuyện thành công"
             description="Trang chuyên biệt cho success stories, phục vụ truyền thông và truyền cảm hứng trong cộng đồng Alumni."
@@ -77,6 +82,7 @@ export const publicRoutes = [
         path: 'cong-dong-alumni/thu-vien-hinh-anh',
         element: (
           <FeatureShellPage
+            breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Cộng đồng Alumni' }, { label: 'Thư viện hình ảnh' }]}
             eyebrow="Cộng đồng Alumni"
             title="Thư viện hình ảnh"
             description="Khung hiển thị gallery đã được tạo route riêng để chuẩn bị cho album ảnh và form đóng góp link Google Drive."
@@ -90,6 +96,7 @@ export const publicRoutes = [
         path: 'dich-vu-alumni/hoa-sen-shop',
         element: (
           <FeatureShellPage
+            breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Dịch vụ Alumni' }, { label: 'Hoa Sen Shop' }]}
             eyebrow="Dịch vụ Alumni"
             title="Hoa Sen Shop"
             description="Landing page giới thiệu các ưu đãi và dịch vụ mua sắm dành cho cộng đồng Alumni. Giai đoạn hiện tại, route được mở sẵn để gắn nội dung CMS hoặc business module khi stakeholder chốt phạm vi."
@@ -101,6 +108,7 @@ export const publicRoutes = [
         path: 'dich-vu-alumni/hoa-sen-courses',
         element: (
           <FeatureShellPage
+            breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Dịch vụ Alumni' }, { label: 'Hoa Sen Courses' }]}
             eyebrow="Dịch vụ Alumni"
             title="Hoa Sen Courses"
             description="Landing page cho các cơ hội học tập, ưu đãi khóa học và các lộ trình phát triển tiếp theo dành cho Alumni."

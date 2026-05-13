@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createJobListing } from '../../api/jobs';
 import { listTags } from '../../api/tags';
+import PageLayout from '../../components/common/PageLayout';
 
 function JobPostPage() {
   const navigate = useNavigate();
@@ -62,15 +63,24 @@ function JobPostPage() {
   });
 
   return (
-    <div className="page-shell">
+    <PageLayout
+      breadcrumbItems={[
+        { label: 'Trang chủ', to: '/' },
+        { label: 'Việc làm & Kết nối' },
+        { label: 'Hoa Sen Job', to: '/viec-lam-ket-noi/hoa-sen-job' },
+        { label: 'Đăng tin tuyển dụng' },
+      ]}
+      eyebrow="Hoa Sen Job"
+      title="Đăng tin tuyển dụng"
+      description="Alumni có thể đăng cơ hội việc làm để hệ thống matching với những ứng viên đang bật trạng thái tìm việc."
+      actions={
+        <Link to="/viec-lam-ket-noi/hoa-sen-job" className="btn-secondary">
+          Quay lại danh sách
+        </Link>
+      }
+    >
       <section className="panel px-6 py-8 lg:px-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand">Hoa Sen Job</p>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight">Đăng tin tuyển dụng</h1>
-        <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-          Alumni có thể đăng cơ hội việc làm để hệ thống matching với những ứng viên đang bật trạng thái tìm việc.
-        </p>
-
-        <form className="mt-8 grid gap-6 lg:grid-cols-2" onSubmit={onSubmit}>
+        <form className="grid gap-6 lg:grid-cols-2" onSubmit={onSubmit}>
           <label>
             <span className="input-label">Tên công việc</span>
             <input className="input-field" {...register('job_name', { required: true })} />
@@ -119,7 +129,7 @@ function JobPostPage() {
           </div>
         </form>
       </section>
-    </div>
+    </PageLayout>
   );
 }
 

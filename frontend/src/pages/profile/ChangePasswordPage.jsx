@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import { changePassword } from '../../api/users';
+import PageLayout from '../../components/common/PageLayout';
 
 function ChangePasswordPage() {
   const [status, setStatus] = useState({ type: '', message: '' });
@@ -22,11 +24,19 @@ function ChangePasswordPage() {
   });
 
   return (
-    <div className="page-shell">
+    <PageLayout
+      breadcrumbItems={[
+        { label: 'Trang chủ', to: '/' },
+        { label: 'Dashboard', to: '/dashboard' },
+        { label: 'Hồ sơ cá nhân', to: '/ho-so' },
+        { label: 'Đổi mật khẩu' },
+      ]}
+      eyebrow="Bảo mật"
+      title="Đổi mật khẩu"
+      description="Cập nhật mật khẩu để bảo vệ tài khoản Alumni và giữ quyền truy cập an toàn trên các luồng hồ sơ, Co-op và việc làm."
+    >
       <section className="panel max-w-3xl px-6 py-8 lg:px-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-brand">Bảo mật</p>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight">Đổi mật khẩu</h1>
-        <form className="mt-8 space-y-5" onSubmit={onSubmit}>
+        <form className="space-y-5" onSubmit={onSubmit}>
           <label className="block">
             <span className="input-label">Mật khẩu hiện tại</span>
             <input className="input-field" type="password" {...register('old_password', { required: true })} />
@@ -39,19 +49,22 @@ function ChangePasswordPage() {
             <span className="input-label">Xác nhận mật khẩu mới</span>
             <input className="input-field" type="password" {...register('confirm_password', { required: true, minLength: 8 })} />
           </label>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
             <button type="submit" className="btn-primary">
               Cập nhật mật khẩu
             </button>
-            {status.message ? (
-              <p className={`text-sm ${status.type === 'error' ? 'text-red-600' : 'text-emerald-600'}`}>
-                {status.message}
-              </p>
-            ) : null}
+            <Link to="/ho-so" className="btn-secondary">
+              Quay lại hồ sơ
+            </Link>
           </div>
+          {status.message ? (
+            <p className={`text-sm ${status.type === 'error' ? 'text-red-600' : 'text-emerald-600'}`}>
+              {status.message}
+            </p>
+          ) : null}
         </form>
       </section>
-    </div>
+    </PageLayout>
   );
 }
 
