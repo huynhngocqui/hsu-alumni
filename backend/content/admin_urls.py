@@ -1,19 +1,40 @@
 from django.urls import path
 
 from .views import (
+    AdminAlumniPostDetailView,
+    AdminAlumniPostListCreateView,
     AdminAlumniStoryDetailView,
     AdminAlumniStoryListCreateView,
     AdminArticleDetailView,
     AdminArticleListCreateView,
+    AdminEventDetailView,
+    AdminEventListCreateView,
     AdminGalleryDetailView,
     AdminGalleryListCreateView,
+    AdminMediaUploadView,
+    AdminNewsCategoryDetailView,
+    AdminNewsCategoryListCreateView,
+    AdminNewsPostDetailView,
+    AdminNewsPostListCreateView,
+    AdminSummaryView,
 )
 
 urlpatterns = [
+    path('summary', AdminSummaryView.as_view(), name='admin-summary'),
     path('content/articles', AdminArticleListCreateView.as_view(), name='admin-article-list'),
     path('content/articles/<int:pk>', AdminArticleDetailView.as_view(), name='admin-article-detail'),
     path('content/gallery', AdminGalleryListCreateView.as_view(), name='admin-gallery-list'),
     path('content/gallery/<int:pk>', AdminGalleryDetailView.as_view(), name='admin-gallery-detail'),
     path('content/stories', AdminAlumniStoryListCreateView.as_view(), name='admin-story-list'),
     path('content/stories/<int:pk>', AdminAlumniStoryDetailView.as_view(), name='admin-story-detail'),
+    path('cong-dong-alumni', AdminAlumniPostListCreateView.as_view(), name='admin-alumni-post-list'),
+    path('cong-dong-alumni/<int:pk>', AdminAlumniPostDetailView.as_view(), name='admin-alumni-post-detail'),
+    path('tin-tuc/danh-muc', AdminNewsCategoryListCreateView.as_view(), name='admin-news-category-list'),
+    path('tin-tuc/danh-muc/<int:pk>', AdminNewsCategoryDetailView.as_view(), name='admin-news-category-detail'),
+    path('tin-tuc', AdminNewsPostListCreateView.as_view(), name='admin-news-post-list'),
+    path('tin-tuc/<int:pk>', AdminNewsPostDetailView.as_view(), name='admin-news-post-detail'),
+    path('su-kien', AdminEventListCreateView.as_view(), name='admin-event-list'),
+    path('su-kien/<int:pk>', AdminEventDetailView.as_view(), name='admin-event-detail'),
+    path('upload', AdminMediaUploadView.as_view(), name='admin-upload'),
+    path('media/upload', AdminMediaUploadView.as_view(), name='admin-media-upload'),
 ]

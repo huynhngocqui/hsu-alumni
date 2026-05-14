@@ -9,6 +9,10 @@ export function listPublicStories(category) {
   return apiClient.get(`/content/stories${suffix}`);
 }
 
+export function getPublicStoryDetail(slug) {
+  return apiClient.get(`/content/stories/${slug}`);
+}
+
 export function listPublicGallery() {
   return apiClient.get('/content/gallery');
 }
@@ -18,6 +22,12 @@ export function getHomepageContent() {
 }
 
 export function listArticles(params = '') {
+  if (params && typeof params === 'object') {
+    const qs = new URLSearchParams(
+      Object.fromEntries(Object.entries(params).filter(([, v]) => v !== undefined && v !== null && v !== ''))
+    ).toString();
+    return apiClient.get(`/content/articles${qs ? '?' + qs : ''}`);
+  }
   return apiClient.get(`/content/articles${params}`);
 }
 

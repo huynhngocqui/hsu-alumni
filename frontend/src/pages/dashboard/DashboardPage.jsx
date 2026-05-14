@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { listDashboardMatches } from '../../api/matching';
 import PageLayout from '../../components/common/PageLayout';
 import EmptyState from '../../components/common/EmptyState';
@@ -7,6 +7,7 @@ import { useAuth } from '../../hooks/useAuth';
 
 function DashboardPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [matches, setMatches] = useState({ job_matches: [], coop_matches: [] });
 
   useEffect(() => {
@@ -104,7 +105,7 @@ function DashboardPage() {
                 title="Chưa có gợi ý"
                 message="Cập nhật thêm lĩnh vực quan tâm hoặc bật trạng thái tìm việc để tăng độ phủ matching."
                 actionLabel="Hoàn thiện hồ sơ"
-                action={() => {}}
+                action={() => navigate('/ho-so')}
               />
             )}
           </div>

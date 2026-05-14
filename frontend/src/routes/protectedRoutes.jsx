@@ -1,10 +1,13 @@
+import { lazy } from 'react';
 import MainLayout from '../components/layout/MainLayout';
 import ProtectedRoute from './ProtectedRoute';
-import CoopPostPage from '../pages/coop/CoopPostPage';
-import DashboardPage from '../pages/dashboard/DashboardPage';
-import JobPostPage from '../pages/jobs/JobPostPage';
-import ProfilePage from '../pages/profile/ProfilePage';
-import ChangePasswordPage from '../pages/profile/ChangePasswordPage';
+import LazyRoute from './LazyRoute';
+
+const CoopPostPage = lazy(() => import('../pages/coop/CoopPostPage'));
+const DashboardPage = lazy(() => import('../pages/dashboard/DashboardPage'));
+const JobPostPage = lazy(() => import('../pages/jobs/JobPostPage'));
+const ProfilePage = lazy(() => import('../pages/profile/ProfilePage'));
+const ChangePasswordPage = lazy(() => import('../pages/profile/ChangePasswordPage'));
 
 export const protectedRoutes = [
   {
@@ -13,11 +16,11 @@ export const protectedRoutes = [
       {
         element: <MainLayout />,
         children: [
-          { path: 'dashboard', element: <DashboardPage /> },
-          { path: 'ho-so', element: <ProfilePage /> },
-          { path: 'ho-so/doi-mat-khau', element: <ChangePasswordPage /> },
-          { path: 'dich-vu-alumni/hoa-sen-coop/dang-moi', element: <CoopPostPage /> },
-          { path: 'viec-lam-ket-noi/dang-tin-tuyen-dung', element: <JobPostPage /> },
+          { path: 'dashboard', element: <LazyRoute component={DashboardPage} /> },
+          { path: 'ho-so', element: <LazyRoute component={ProfilePage} /> },
+          { path: 'ho-so/doi-mat-khau', element: <LazyRoute component={ChangePasswordPage} /> },
+          { path: 'dich-vu-alumni/hoa-sen-coop/dang-moi', element: <LazyRoute component={CoopPostPage} /> },
+          { path: 'viec-lam-ket-noi/dang-tin-tuyen-dung', element: <LazyRoute component={JobPostPage} /> },
         ],
       },
     ],

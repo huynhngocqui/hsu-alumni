@@ -1,5 +1,23 @@
 import { apiClient } from './client';
 
+function buildQueryString(params = {}) {
+  if (typeof params === 'string') {
+    return params;
+  }
+
+  const queryString = new URLSearchParams(
+    Object.fromEntries(
+      Object.entries(params).filter(([, value]) => value !== undefined && value !== null && value !== '')
+    )
+  ).toString();
+
+  return queryString ? `?${queryString}` : '';
+}
+
+export function getAdminSummary() {
+  return apiClient.get('/admin/summary');
+}
+
 export function listAdminUsers(params = '') {
   return apiClient.get(`/admin/users${params}`);
 }
@@ -70,4 +88,66 @@ export function updateAdminTag(id, payload) {
 
 export function deleteAdminTag(id) {
   return apiClient.delete(`/admin/tags/${id}`);
+}
+
+export function listAdminNewsPosts(params = {}) {
+  return apiClient.get(`/admin/tin-tuc${buildQueryString(params)}`);
+}
+
+export function getAdminNewsPost(id) {
+  return apiClient.get(`/admin/tin-tuc/${id}`);
+}
+
+export function createAdminNewsPost(payload) {
+  return apiClient.post('/admin/tin-tuc', payload);
+}
+
+export function updateAdminNewsPost(id, payload) {
+  return apiClient.put(`/admin/tin-tuc/${id}`, payload);
+}
+
+export function deleteAdminNewsPost(id) {
+  return apiClient.delete(`/admin/tin-tuc/${id}`);
+}
+
+export function listAdminNewsCategories() {
+  return apiClient.get('/admin/tin-tuc/danh-muc');
+}
+
+export function createAdminNewsCategory(payload) {
+  return apiClient.post('/admin/tin-tuc/danh-muc', payload);
+}
+
+export function updateAdminNewsCategory(id, payload) {
+  return apiClient.put(`/admin/tin-tuc/danh-muc/${id}`, payload);
+}
+
+export function deleteAdminNewsCategory(id) {
+  return apiClient.delete(`/admin/tin-tuc/danh-muc/${id}`);
+}
+
+export function listAdminEvents(params = {}) {
+  return apiClient.get(`/admin/su-kien${buildQueryString(params)}`);
+}
+
+export function getAdminEvent(id) {
+  return apiClient.get(`/admin/su-kien/${id}`);
+}
+
+export function createAdminEvent(payload) {
+  return apiClient.post('/admin/su-kien', payload);
+}
+
+export function updateAdminEvent(id, payload) {
+  return apiClient.put(`/admin/su-kien/${id}`, payload);
+}
+
+export function deleteAdminEvent(id) {
+  return apiClient.delete(`/admin/su-kien/${id}`);
+}
+
+export function uploadAdminMedia(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  return apiClient.post('/admin/upload', formData);
 }

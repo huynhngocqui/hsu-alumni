@@ -1,11 +1,18 @@
+import { lazy } from 'react';
 import AdminLayout from '../components/layout/AdminLayout';
 import AdminRoute from './AdminRoute';
-import AdminDashboardPage from '../pages/admin/AdminDashboardPage';
-import AdminArticlesPage from '../pages/admin/AdminArticlesPage';
-import AdminGalleryPage from '../pages/admin/AdminGalleryPage';
-import AdminStoriesPage from '../pages/admin/AdminStoriesPage';
-import AdminTagsPage from '../pages/admin/AdminTagsPage';
-import AdminUsersPage from '../pages/admin/AdminUsersPage';
+import LazyRoute from './LazyRoute';
+
+const AdminAlumniPostsPage = lazy(() => import('../pages/admin/AdminAlumniPostsPage'));
+const AdminDashboardPage = lazy(() => import('../pages/admin/AdminDashboardPage'));
+const AdminArticlesPage = lazy(() => import('../pages/admin/AdminArticlesPage'));
+const AdminEventsPage = lazy(() => import('../pages/admin/AdminEventsPage'));
+const AdminGalleryPage = lazy(() => import('../pages/admin/AdminGalleryPage'));
+const AdminNewsCategoriesPage = lazy(() => import('../pages/admin/AdminNewsCategoriesPage'));
+const AdminNewsPage = lazy(() => import('../pages/admin/AdminNewsPage'));
+const AdminStoriesPage = lazy(() => import('../pages/admin/AdminStoriesPage'));
+const AdminTagsPage = lazy(() => import('../pages/admin/AdminTagsPage'));
+const AdminUsersPage = lazy(() => import('../pages/admin/AdminUsersPage'));
 
 export const adminRoutes = [
   {
@@ -14,26 +21,42 @@ export const adminRoutes = [
       {
         element: <AdminLayout />,
         children: [
-          { path: 'admin', element: <AdminDashboardPage /> },
+          { path: 'admin', element: <LazyRoute component={AdminDashboardPage} /> },
           {
             path: 'admin/users',
-            element: <AdminUsersPage />,
+            element: <LazyRoute component={AdminUsersPage} />,
           },
           {
             path: 'admin/content/articles',
-            element: <AdminArticlesPage />,
+            element: <LazyRoute component={AdminArticlesPage} />,
+          },
+          {
+            path: 'admin/tin-tuc',
+            element: <LazyRoute component={AdminNewsPage} />,
+          },
+          {
+            path: 'admin/tin-tuc/danh-muc',
+            element: <LazyRoute component={AdminNewsCategoriesPage} />,
+          },
+          {
+            path: 'admin/su-kien',
+            element: <LazyRoute component={AdminEventsPage} />,
+          },
+          {
+            path: 'admin/cong-dong-alumni',
+            element: <LazyRoute component={AdminAlumniPostsPage} />,
           },
           {
             path: 'admin/content/stories',
-            element: <AdminStoriesPage />,
+            element: <LazyRoute component={AdminStoriesPage} />,
           },
           {
             path: 'admin/content/gallery',
-            element: <AdminGalleryPage />,
+            element: <LazyRoute component={AdminGalleryPage} />,
           },
           {
             path: 'admin/tags',
-            element: <AdminTagsPage />,
+            element: <LazyRoute component={AdminTagsPage} />,
           },
         ],
       },

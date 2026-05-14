@@ -47,7 +47,7 @@ function Footer() {
 
   return (
     <footer className="mt-auto bg-[#034ea1] text-white" style={footerStyle}>
-      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8 lg:py-5">
+      <div className="page-shell py-4 gap-0">
         <div className="space-y-5">
           <BrandImage
             src={footerBrandLogo}
@@ -63,7 +63,7 @@ function Footer() {
           />
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-[2.2fr_0.8fr_0.6fr_0.8fr] mt-6 border-t border-white/[0.1] pt-6">
+        <div className="grid gap-8 lg:grid-cols-[2.2fr_0.8fr_0.6fr_0.8fr] mt-4 border-t border-white/[0.1] pt-4">
           <div className="space-y-5">
             <div>
               <h3 className="text-lg font-semibold text-white">Thông tin liên hệ</h3>
@@ -130,8 +130,10 @@ function Footer() {
             </div>
           ))}
         </div>
+      </div>
 
-        <div className="mt-5 pt-5 text-sm text-white/62">
+      <div className="text-sm text-white/62 bg-[#044b99]">
+        <div className="page-shell py-4">
           <p>Bản quyền thuộc về <a href="https://www.hoasen.edu.vn/" target="_blank" rel="noreferrer noopener" className='text-[#70b4ff]'>{footerConfig.copyright}</a></p>
         </div>
       </div>

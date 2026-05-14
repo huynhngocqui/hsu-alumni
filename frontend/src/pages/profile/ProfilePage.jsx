@@ -1,19 +1,23 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { updateCurrentUserProfile } from '../../api/users';
+import { listTags } from '../../api/tags';
 import PageLayout from '../../components/common/PageLayout';
+import TagSelector from '../../components/common/TagSelector';
 import { useAuth } from '../../hooks/useAuth';
 
 function ProfilePage() {
   const { user, updateUser } = useAuth();
   const [status, setStatus] = useState({ type: '', message: '' });
+  const [allTags, setAllTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState(user?.interest_tags || []);
+
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       full_name: user?.full_name || '',
       email: user?.email || '',
       current_company: user?.current_company || '',
       position: user?.position || '',
-      interest_tags: user?.interest_tags?.join(', ') || '',
       job_seeking_status: Boolean(user?.job_seeking_status),
     },
   });
@@ -24,10 +28,16 @@ function ProfilePage() {
       email: user?.email || '',
       current_company: user?.current_company || '',
       position: user?.position || '',
-      interest_tags: user?.interest_tags?.join(', ') || '',
       job_seeking_status: Boolean(user?.job_seeking_status),
     });
+    setSelectedTags(user?.interest_tags || []);
   }, [reset, user]);
+
+  useEffect(() => {
+    listTags()
+      .then((tags) => setAllTags((tags || []).map((t) => (typeof t === 'string' ? t : t.name))))
+      .catch(() => {});
+  }, []);
 
   const onSubmit = handleSubmit(async (values) => {
     try {
@@ -36,10 +46,7 @@ function ProfilePage() {
         current_company: values.current_company,
         position: values.position,
         job_seeking_status: Boolean(values.job_seeking_status),
-        interest_tags: values.interest_tags
-          .split(',')
-          .map((item) => item.trim())
-          .filter(Boolean),
+        interest_tags: selectedTags,
       };
       const response = await updateCurrentUserProfile(payload);
       updateUser(response.user || payload);
@@ -80,11 +87,16 @@ function ProfilePage() {
           </label>
           <label className="lg:col-span-2">
             <span className="input-label">Lĩnh vực quan tâm</span>
-            <textarea
-              className="input-field min-h-32"
-              placeholder="Ví dụ: F&B, Technology, Marketing"
-              {...register('interest_tags')}
-            />
+            <div className="mt-2">
+              {allTags.length ? (
+                <TagSelector allTags={allTags} selected={selectedTags} onChange={setSelectedTags} />
+              ) : (
+                <p className="text-sm text-slate-400">Đang tải danh sách lĩnh vực...</p>
+              )}
+              {selectedTags.length > 0 ? (
+                <p className="mt-2 text-xs text-slate-500">Đã chọn: {selectedTags.join(', ')}</p>
+              ) : null}
+            </div>
           </label>
           <label className="lg:col-span-2 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-700">
             <input type="checkbox" className="h-4 w-4 accent-brand" {...register('job_seeking_status')} />

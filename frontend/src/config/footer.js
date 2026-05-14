@@ -42,6 +42,12 @@ export const footerConfig = {
       links: [
         { id: 'footer-home', label: 'Trang chủ', href: '/', external: false },
         {
+          id: 'footer-community-directory',
+          label: 'Cộng đồng Alumni',
+          href: '/cong-dong-alumni',
+          external: false,
+        },
+        {
           id: 'footer-direction',
           label: 'Định hướng hoạt động',
           href: '/gioi-thieu/dinh-huong-hoat-dong',

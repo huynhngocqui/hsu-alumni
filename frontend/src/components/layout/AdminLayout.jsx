@@ -1,45 +1,70 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import AdminHeader from '../admin/AdminHeader';
+import AdminSidebar from '../admin/AdminSidebar';
+import {
+  CalendarIcon,
+  ChartBarIcon,
+  DocumentIcon,
+  FolderIcon,
+  ImageIcon,
+  TagIcon,
+  UsersIcon,
+} from '../common/icons';
 
-const adminLinks = [
-  { to: '/admin', label: 'Tổng quan' },
-  { to: '/admin/users', label: 'Tài khoản' },
-  { to: '/admin/content/articles', label: 'Bài viết' },
-  { to: '/admin/content/stories', label: 'Alumni stories' },
-  { to: '/admin/content/gallery', label: 'Thư viện ảnh' },
-  { to: '/admin/tags', label: 'Tags' },
+const adminSections = [
+  {
+    label: 'Điều phối',
+    items: [
+      { to: '/admin', label: 'Tổng quan', icon: ChartBarIcon },
+      { to: '/admin/users', label: 'Người dùng', icon: UsersIcon },
+    ],
+  },
+  {
+    label: 'Nội dung mới',
+    items: [
+      { to: '/admin/tin-tuc', label: 'Tin tức', icon: DocumentIcon },
+      { to: '/admin/su-kien', label: 'Sự kiện', icon: CalendarIcon },
+      { to: '/admin/tin-tuc/danh-muc', label: 'Danh mục tin tức', icon: FolderIcon },
+      { to: '/admin/cong-dong-alumni', label: 'Cộng đồng Alumni', icon: UsersIcon },
+    ],
+  },
+  {
+    label: 'CMS hiện có',
+    items: [
+      { to: '/admin/content/articles', label: 'Bài viết legacy', icon: DocumentIcon },
+      { to: '/admin/content/stories', label: 'Alumni stories', icon: ImageIcon },
+      { to: '/admin/content/gallery', label: 'Thư viện ảnh', icon: ImageIcon },
+      { to: '/admin/tags', label: 'Tags', icon: TagIcon },
+    ],
+  },
 ];
 
 function AdminLayout() {
+  const location = useLocation();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const allItems = adminSections.flatMap((section) => section.items);
+  const activeItem = allItems.find((item) => location.pathname === item.to)
+    || allItems.find((item) => location.pathname.startsWith(`${item.to}/`));
+
   return (
-    <div className="min-h-screen bg-slate-100">
-      <div className="mx-auto grid min-h-screen max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[260px_1fr] lg:px-6">
-        <aside className="panel h-fit p-4">
-          <div className="mb-4">
-            <p className="text-xs uppercase tracking-[0.3em] text-brand">Admin</p>
-            <h2 className="mt-2 text-xl font-semibold">HSU Alumni CMS</h2>
-          </div>
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_#f8fbff_0%,_#eef4fb_38%,_#e7edf8_100%)] text-slate-900">
+      <AdminSidebar
+        sections={adminSections}
+        open={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
 
-          <nav className="space-y-2">
-            {adminLinks.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                end={link.to === '/admin'}
-                className={({ isActive }) =>
-                  `block rounded-2xl px-4 py-3 text-sm font-medium transition ${
-                    isActive ? 'bg-brand text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-brand-ink'
-                  }`
-                }
-              >
-                {link.label}
-              </NavLink>
-            ))}
-          </nav>
-        </aside>
+      <div className="min-h-screen lg:pl-[290px]">
+        <AdminHeader
+          title={activeItem?.label || 'HSU Alumni CMS'}
+          description="Hệ quản trị nội dung cho tin tức, sự kiện và cộng đồng cựu sinh viên Hoa Sen."
+          onMenuClick={() => setIsSidebarOpen(true)}
+        />
 
-        <div className="min-w-0">
+        <main className="px-4 pb-8 pt-6 sm:px-6 lg:px-8 xl:px-10">
           <Outlet />
-        </div>
+        </main>
       </div>
     </div>
   );

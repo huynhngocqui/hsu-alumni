@@ -187,8 +187,8 @@ export const joinSection = {
       external: false,
     },
     {
-      label: 'Xem chính sách Alumni',
-      href: '/cong-dong-alumni/chinh-sach-alumni',
+      label: 'Khám phá cộng đồng Alumni',
+      href: '/cong-dong-alumni',
       external: false,
     },
   ],

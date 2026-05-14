@@ -1,10 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import EmptyState from '../../components/common/EmptyState';
 import PageLayout from '../../components/common/PageLayout';
+import PaginationControls from '../../components/common/PaginationControls';
+import NewsSearchBar from '../../components/news/NewsSearchBar';
 import { listPublicStories } from '../../api/content';
+import { useDebouncedValue } from '../../hooks/useDebouncedValue';
+import StoryCard from '../../components/stories/StoryCard';
 
-function PublicStoriesPage({ category, eyebrow, title, description, breadcrumbItems }) {
+function PublicStoriesPage({ category, eyebrow, title, description, breadcrumbItems, detailBasePath, pageSize = 9 }) {
   const [items, setItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchValue, setSearchValue] = useState('');
+  const debouncedSearch = useDebouncedValue(searchValue, 250);
 
   useEffect(() => {
     let active = true;
@@ -14,10 +21,12 @@ function PublicStoriesPage({ category, eyebrow, title, description, breadcrumbIt
         const nextItems = await listPublicStories(category);
         if (active) {
           setItems(nextItems);
+          setCurrentPage(1);
         }
       } catch {
         if (active) {
           setItems([]);
+          setCurrentPage(1);
         }
       }
     }
@@ -28,34 +37,65 @@ function PublicStoriesPage({ category, eyebrow, title, description, breadcrumbIt
     };
   }, [category]);
 
+  const filteredItems = useMemo(() => {
+    const normalizedQuery = debouncedSearch.trim().toLowerCase();
+    if (!normalizedQuery) {
+      return items;
+    }
+
+    return items.filter((item) => [
+      item.title,
+      item.alumni_name,
+      item.role_title,
+      item.company_name,
+      item.excerpt,
+      item.body,
+    ].some((value) => (value || '').toLowerCase().includes(normalizedQuery)));
+  }, [debouncedSearch, items]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredItems.length / pageSize));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const startIndex = (safeCurrentPage - 1) * pageSize;
+  const visibleItems = filteredItems.slice(startIndex, startIndex + pageSize);
+
   return (
     <PageLayout
       breadcrumbItems={breadcrumbItems}
       eyebrow={eyebrow}
       title={title}
       description={description}
+      panelContent={
+        <NewsSearchBar
+          value={searchValue}
+          onChange={(value) => {
+            setSearchValue(value);
+            setCurrentPage(1);
+          }}
+          resultsLabel={`Hiển thị ${visibleItems.length} / ${filteredItems.length} câu chuyện`}
+        />
+      }
     >
-      {items.length ? (
-        <section className="grid gap-5 lg:grid-cols-2">
-          {items.map((item) => (
-            <article key={item.id} className="panel overflow-hidden">
-              {item.featured_image_url ? (
-                <img src={item.featured_image_url} alt={item.title} className="h-56 w-full object-cover" />
-              ) : null}
-              <div className="px-6 py-6 lg:px-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-brand-red">{item.story_category}</p>
-                <h2 className="mt-3 text-2xl font-semibold text-brand-ink">{item.title}</h2>
-                <p className="mt-3 text-sm text-slate-500">{item.alumni_name}{item.role_title ? ` · ${item.role_title}` : ''}{item.company_name ? ` · ${item.company_name}` : ''}</p>
-                <p className="mt-4 text-sm leading-7 text-slate-600">{item.excerpt || item.body}</p>
-              </div>
-            </article>
-          ))}
-        </section>
-      ) : (
+      {!items.length ? (
         <EmptyState
           title="Chưa có alumni story"
           message="Admin chưa publish nội dung cho chuyên mục này."
         />
+      ) : !filteredItems.length ? (
+        <EmptyState
+          title="Không tìm thấy câu chuyện phù hợp"
+          message="Hãy thử đổi từ khóa tìm kiếm để tìm alumni story phù hợp hơn."
+          action={() => setSearchValue('')}
+          actionLabel="Xóa tìm kiếm"
+        />
+      ) : (
+        <section className="space-y-6">
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {visibleItems.map((item) => (
+              <StoryCard key={item.id} item={item} detailBasePath={detailBasePath} compact />
+            ))}
+          </div>
+          <PaginationControls currentPage={safeCurrentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+        </section>
       )}
     </PageLayout>
   );

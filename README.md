@@ -15,6 +15,12 @@ Rebuild of the HSU Alumni landing page as a web app while preserving the origina
 docker compose up --build
 ```
 
+Seed public CMS demo content:
+
+```bash
+python backend/scripts/seed_cms_content.py
+```
+
 Landing page:
 
 - http://localhost:3456
@@ -31,4 +37,5 @@ Landing API data:
 
 - Frontend is served on port 3456.
 - Backend seeds default landing content into MongoDB (`landing_pages` collection, slug `home`) if no data exists.
+- CMS public pages, news, events, webinars, stories, and gallery can be seeded locally with `python backend/scripts/seed_cms_content.py`.
 - You can update landing content directly in MongoDB to drive the React UI without code changes.

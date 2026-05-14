@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import LoadingState from '../components/common/LoadingState';
 import { useAuth } from '../hooks/useAuth';
+import ForbiddenPage from '../pages/shared/ForbiddenPage';
 
 function AdminRoute() {
   const { isAuthenticated, isAuthReady, user } = useAuth();
@@ -14,7 +15,7 @@ function AdminRoute() {
   }
 
   if (user?.role !== 'ADMIN') {
-    return <Navigate to="/dashboard" replace />;
+    return <ForbiddenPage />;
   }
 
   return <Outlet />;

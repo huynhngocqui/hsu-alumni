@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import Breadcrumb from './Breadcrumb';
 
 function PageLayout({
@@ -9,9 +10,13 @@ function PageLayout({
   aside = null,
   panelContent = null,
   children = null,
+  fullWidth = false,
 }) {
+  const location = useLocation();
+  const isAdminView = fullWidth || location.pathname.startsWith('/admin');
+
   return (
-    <div className="page-shell">
+    <div className={isAdminView ? 'flex w-full flex-col gap-8' : 'page-shell'}>
       <Breadcrumb items={breadcrumbItems} />
 
       <section className="panel overflow-hidden">

@@ -1,9 +1,12 @@
+import { lazy } from 'react';
 import AuthLayout from '../components/layout/AuthLayout';
 import GuestOnlyRoute from './GuestOnlyRoute';
-import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage';
-import LoginPage from '../pages/auth/LoginPage';
-import RegisterPage from '../pages/auth/RegisterPage';
-import ResetPasswordPage from '../pages/auth/ResetPasswordPage';
+import LazyRoute from './LazyRoute';
+
+const ForgotPasswordPage = lazy(() => import('../pages/auth/ForgotPasswordPage'));
+const LoginPage = lazy(() => import('../pages/auth/LoginPage'));
+const RegisterPage = lazy(() => import('../pages/auth/RegisterPage'));
+const ResetPasswordPage = lazy(() => import('../pages/auth/ResetPasswordPage'));
 
 export const authRoutes = [
   {
@@ -12,10 +15,10 @@ export const authRoutes = [
       {
         element: <AuthLayout />,
         children: [
-          { path: 'dang-nhap', element: <LoginPage /> },
-          { path: 'dang-ky', element: <RegisterPage /> },
-          { path: 'quen-mat-khau', element: <ForgotPasswordPage /> },
-          { path: 'thiet-lap-mat-khau', element: <ResetPasswordPage /> },
+          { path: 'dang-nhap', element: <LazyRoute component={LoginPage} /> },
+          { path: 'dang-ky', element: <LazyRoute component={RegisterPage} /> },
+          { path: 'quen-mat-khau', element: <LazyRoute component={ForgotPasswordPage} /> },
+          { path: 'thiet-lap-mat-khau', element: <LazyRoute component={ResetPasswordPage} /> },
         ],
       },
     ],
