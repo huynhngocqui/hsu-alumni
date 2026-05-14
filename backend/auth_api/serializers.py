@@ -18,6 +18,9 @@ def _normalize_match_value(value):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(validators=[])
+    identity_id = serializers.CharField(validators=[])
+
     class Meta:
         model = User
         fields = [
@@ -34,10 +37,18 @@ class RegisterSerializer(serializers.ModelSerializer):
             'identity_id',
         ]
 
+    def validate_email(self, value):
+        normalized = str(value).strip().lower()
+        if User.objects.filter(email__iexact=normalized).exists():
+            raise serializers.ValidationError('Email này đã được đăng ký. Hãy đăng nhập hoặc dùng email khác.')
+        return normalized
+
     def validate_identity_id(self, value):
         normalized = ''.join(character for character in str(value) if character.isdigit())
         if len(normalized) not in {9, 12}:
             raise serializers.ValidationError('Identity ID must contain 9 or 12 digits.')
+        if User.objects.filter(identity_id=normalized).exists():
+            raise serializers.ValidationError('CCCD/CMND này đã được đăng ký.')
         return normalized
 
     def validate_phone_number(self, value):

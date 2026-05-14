@@ -74,6 +74,18 @@ function RegisterPage() {
         message: 'Đăng ký thành công. Hệ thống sẽ gửi email thiết lập mật khẩu khi tài khoản được xác thực.',
       });
     } catch (error) {
+      if (error?.payload && typeof error.payload === 'object' && !Array.isArray(error.payload)) {
+        Object.entries(error.payload).forEach(([fieldName, fieldValue]) => {
+          if (['detail', 'error', 'message'].includes(fieldName)) {
+            return;
+          }
+
+          const message = Array.isArray(fieldValue) ? fieldValue[0] : fieldValue;
+          if (typeof message === 'string') {
+            setError(fieldName, { type: 'server', message });
+          }
+        });
+      }
       setStatus({ type: 'error', message: error.message || 'Không thể gửi đăng ký.' });
     }
   });
@@ -100,38 +112,47 @@ function RegisterPage() {
         <label>
           <span className="input-label">Email cá nhân</span>
           <input className="input-field" type="email" {...register('email', { required: 'Bắt buộc nhập email.' })} />
+          {errors.email ? <p className="mt-2 text-sm text-red-600">{errors.email.message}</p> : null}
         </label>
         <label>
           <span className="input-label">Số điện thoại</span>
           <input className="input-field" {...register('phone_number', { required: 'Bắt buộc nhập số điện thoại.' })} />
+          {errors.phone_number ? <p className="mt-2 text-sm text-red-600">{errors.phone_number.message}</p> : null}
         </label>
         <label>
           <span className="input-label">CCCD/CMND</span>
           <input className="input-field" {...register('identity_id', { required: 'Bắt buộc nhập CCCD/CMND.' })} />
+          {errors.identity_id ? <p className="mt-2 text-sm text-red-600">{errors.identity_id.message}</p> : null}
         </label>
         <label>
           <span className="input-label">Mã số sinh viên</span>
           <input className="input-field" {...register('student_id')} />
+          {errors.student_id ? <p className="mt-2 text-sm text-red-600">{errors.student_id.message}</p> : null}
         </label>
         <label>
           <span className="input-label">Ngành học</span>
           <input className="input-field" {...register('major', { required: 'Bắt buộc nhập ngành học.' })} />
+          {errors.major ? <p className="mt-2 text-sm text-red-600">{errors.major.message}</p> : null}
         </label>
         <label>
           <span className="input-label">Bậc đào tạo</span>
           <input className="input-field" {...register('academic_degree', { required: 'Bắt buộc nhập bậc đào tạo.' })} />
+          {errors.academic_degree ? <p className="mt-2 text-sm text-red-600">{errors.academic_degree.message}</p> : null}
         </label>
         <label>
           <span className="input-label">Hệ đào tạo</span>
           <input className="input-field" {...register('mode_of_study', { required: 'Bắt buộc nhập hệ đào tạo.' })} />
+          {errors.mode_of_study ? <p className="mt-2 text-sm text-red-600">{errors.mode_of_study.message}</p> : null}
         </label>
         <label>
           <span className="input-label">Năm nhập học</span>
           <input className="input-field" type="number" {...register('intake_year', { required: 'Bắt buộc nhập năm nhập học.' })} />
+          {errors.intake_year ? <p className="mt-2 text-sm text-red-600">{errors.intake_year.message}</p> : null}
         </label>
         <label>
           <span className="input-label">Năm tốt nghiệp</span>
           <input className="input-field" type="number" {...register('graduation_year', { required: 'Bắt buộc nhập năm tốt nghiệp.' })} />
+          {errors.graduation_year ? <p className="mt-2 text-sm text-red-600">{errors.graduation_year.message}</p> : null}
         </label>
 
         <div className="md:col-span-2">

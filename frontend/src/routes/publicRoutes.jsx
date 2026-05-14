@@ -2,6 +2,9 @@ import { Navigate } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
 import FeatureShellPage from '../components/common/FeatureShellPage';
 import HomePage from '../pages/home/HomePage';
+import PublicContentPage from '../pages/content/PublicContentPage';
+import PublicGalleryPage from '../pages/content/PublicGalleryPage';
+import PublicStoriesPage from '../pages/content/PublicStoriesPage';
 import CoopDetailPage from '../pages/coop/CoopDetailPage';
 import CoopListPage from '../pages/coop/CoopListPage';
 import JobDetailPage from '../pages/jobs/JobDetailPage';
@@ -15,80 +18,29 @@ export const publicRoutes = [
       { index: true, element: <HomePage /> },
       {
         path: 'gioi-thieu/dinh-huong-hoat-dong',
-        element: (
-          <FeatureShellPage
-            breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Giới thiệu' }, { label: 'Định hướng hoạt động' }]}
-            eyebrow="Giới thiệu"
-            title="Định hướng hoạt động Alumni"
-            description="Trang này sẽ dùng để trình bày định hướng hoạt động, sứ mệnh kết nối và chính sách đồng hành cùng Alumni theo nội dung được phê duyệt."
-            highlights={[
-              'Có thể nâng cấp thành CMS content page ở giai đoạn kế tiếp.',
-              'Phù hợp cho SEO page và route public tĩnh.',
-            ]}
-          />
-        ),
+        element: <PublicContentPage pageSlug="dinh-huong-hoat-dong" eyebrow="Giới thiệu" title="Định hướng hoạt động Alumni" description="Nội dung giới thiệu được quản lý từ CMS public pages." breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Giới thiệu' }, { label: 'Định hướng hoạt động' }]} />,
       },
       {
         path: 'cong-dong-alumni/chinh-sach-alumni',
-        element: (
-          <FeatureShellPage
-            breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Cộng đồng Alumni' }, { label: 'Chính sách Alumni' }]}
-            eyebrow="Cộng đồng Alumni"
-            title="Chính sách Alumni"
-            description="Khu vực công khai để công bố chính sách, quyền lợi và nguyên tắc tham gia mạng lưới Alumni HSU."
-            highlights={['Sẵn sàng nối CMS hoặc static content.', 'Route public, phù hợp để SEO.']}
-          />
-        ),
+        element: <PublicContentPage pageSlug="chinh-sach-alumni" eyebrow="Cộng đồng Alumni" title="Chính sách Alumni" description="Chính sách, quyền lợi và nguyên tắc tham gia mạng lưới Alumni HSU." breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Cộng đồng Alumni' }, { label: 'Chính sách Alumni' }]} />,
       },
       { path: 'cong-dong-alumni/chinh-sach', element: <Navigate to="/cong-dong-alumni/chinh-sach-alumni" replace /> },
       {
         path: 'cong-dong-alumni/ban-lien-lac',
-        element: (
-          <FeatureShellPage
-            breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Cộng đồng Alumni' }, { label: 'Thông tin Ban liên lạc' }]}
-            eyebrow="Cộng đồng Alumni"
-            title="Thông tin Ban liên lạc"
-            description="Trang tĩnh/CMS cho danh sách Ban liên lạc và thông tin liên hệ chính thức."
-            highlights={['Admin có thể quản lý nội dung từ CMS.', 'Public route.']}
-          />
-        ),
+        element: <PublicContentPage pageSlug="ban-lien-lac" eyebrow="Cộng đồng Alumni" title="Thông tin Ban liên lạc" description="Danh sách Ban liên lạc và thông tin liên hệ chính thức." breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Cộng đồng Alumni' }, { label: 'Thông tin Ban liên lạc' }]} />,
       },
       {
         path: 'cong-dong-alumni/cuu-sinh-vien-tieu-bieu',
-        element: (
-          <FeatureShellPage
-            breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Cộng đồng Alumni' }, { label: 'Cựu sinh viên tiêu biểu' }]}
-            eyebrow="Cộng đồng Alumni"
-            title="Cựu sinh viên tiêu biểu"
-            description="Danh mục nội dung vinh danh Alumni tiêu biểu, làm nền cho listing card và detail page theo slug."
-            highlights={['Tiếp theo sẽ tách listing và detail route riêng.', 'Dữ liệu dự kiến lấy từ CMS.']}
-          />
-        ),
+        element: <PublicStoriesPage category="OUTSTANDING" eyebrow="Cộng đồng Alumni" title="Cựu sinh viên tiêu biểu" description="Danh mục nội dung vinh danh các alumni tiêu biểu được publish từ CMS." breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Cộng đồng Alumni' }, { label: 'Cựu sinh viên tiêu biểu' }]} />,
       },
       { path: 'cong-dong-alumni/csv-tieu-bieu', element: <Navigate to="/cong-dong-alumni/cuu-sinh-vien-tieu-bieu" replace /> },
       {
         path: 'cong-dong-alumni/cau-chuyen-thanh-cong',
-        element: (
-          <FeatureShellPage
-            breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Cộng đồng Alumni' }, { label: 'Câu chuyện thành công' }]}
-            eyebrow="Cộng đồng Alumni"
-            title="Câu chuyện thành công"
-            description="Trang chuyên biệt cho success stories, phục vụ truyền thông và truyền cảm hứng trong cộng đồng Alumni."
-            highlights={['Sử dụng cùng domain content nhưng route tách riêng.', 'Sẵn sàng SEO theo slug bài viết.']}
-          />
-        ),
+        element: <PublicStoriesPage category="SUCCESS" eyebrow="Cộng đồng Alumni" title="Câu chuyện thành công" description="Những câu chuyện truyền cảm hứng từ cộng đồng alumni được publish từ CMS." breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Cộng đồng Alumni' }, { label: 'Câu chuyện thành công' }]} />,
       },
       {
         path: 'cong-dong-alumni/thu-vien-hinh-anh',
-        element: (
-          <FeatureShellPage
-            breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Cộng đồng Alumni' }, { label: 'Thư viện hình ảnh' }]}
-            eyebrow="Cộng đồng Alumni"
-            title="Thư viện hình ảnh"
-            description="Khung hiển thị gallery đã được tạo route riêng để chuẩn bị cho album ảnh và form đóng góp link Google Drive."
-            highlights={['Public gallery.', 'Sẽ bổ sung form đóng góp ảnh cho Alumni.']}
-          />
-        ),
+        element: <PublicGalleryPage />,
       },
       { path: 'dich-vu-alumni/hoa-sen-coop', element: <CoopListPage /> },
       { path: 'dich-vu-alumni/hoa-sen-coop/:id', element: <CoopDetailPage /> },

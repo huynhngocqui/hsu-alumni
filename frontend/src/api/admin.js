@@ -4,6 +4,10 @@ export function listAdminUsers(params = '') {
   return apiClient.get(`/admin/users${params}`);
 }
 
+export function updateAdminUser(id, payload) {
+  return apiClient.patch(`/admin/users/${id}`, payload);
+}
+
 export function listAdminArticles(params = '') {
   return apiClient.get(`/admin/content/articles${params}`);
 }

@@ -19,6 +19,6 @@ class GalleryItemAdmin(admin.ModelAdmin):
 
 @admin.register(AlumniStory)
 class AlumniStoryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'alumni_name', 'company_name', 'status', 'published_at')
-    list_filter = ('status',)
+    list_display = ('title', 'story_category', 'alumni_name', 'company_name', 'status', 'published_at')
+    list_filter = ('story_category', 'status')
     search_fields = ('title', 'alumni_name', 'company_name')

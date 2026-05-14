@@ -2,6 +2,44 @@ const DEFAULT_HEADERS = {
   Accept: 'application/json',
 };
 
+function extractErrorMessage(payload) {
+  if (!payload) {
+    return '';
+  }
+
+  if (typeof payload === 'string') {
+    return payload;
+  }
+
+  if (Array.isArray(payload)) {
+    for (const item of payload) {
+      const message = extractErrorMessage(item);
+      if (message) {
+        return message;
+      }
+    }
+    return '';
+  }
+
+  if (typeof payload === 'object') {
+    for (const key of ['detail', 'error', 'message']) {
+      const message = extractErrorMessage(payload[key]);
+      if (message) {
+        return message;
+      }
+    }
+
+    for (const value of Object.values(payload)) {
+      const message = extractErrorMessage(value);
+      if (message) {
+        return message;
+      }
+    }
+  }
+
+  return '';
+}
+
 function getCookie(name) {
   if (typeof document === 'undefined') {
     return '';
@@ -40,7 +78,7 @@ async function request(path, options = {}) {
     : await response.text();
 
   if (!response.ok) {
-    const error = new Error(payload?.detail || payload?.error || 'Đã có lỗi xảy ra.');
+    const error = new Error(extractErrorMessage(payload) || 'Đã có lỗi xảy ra.');
     error.status = response.status;
     error.payload = payload;
     throw error;

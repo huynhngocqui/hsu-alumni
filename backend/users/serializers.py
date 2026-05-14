@@ -32,6 +32,19 @@ class UserSerializer(serializers.Serializer):
     role = serializers.CharField()
 
 
+class AdminUserSerializer(UserSerializer):
+    identity_id = serializers.CharField(allow_blank=True, allow_null=True, required=False)
+    is_active = serializers.BooleanField()
+    is_staff = serializers.BooleanField()
+    date_joined = serializers.DateTimeField()
+
+
+class UserModerationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['account_status', 'role', 'is_active']
+
+
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

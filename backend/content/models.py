@@ -67,8 +67,13 @@ class GalleryItem(PublishableModel):
 
 
 class AlumniStory(PublishableModel):
+    class StoryCategory(models.TextChoices):
+        OUTSTANDING = 'OUTSTANDING', 'Outstanding Alumni'
+        SUCCESS = 'SUCCESS', 'Success Story'
+
     title = models.CharField(max_length=180)
     slug = models.SlugField(max_length=190, unique=True, blank=True)
+    story_category = models.CharField(max_length=20, choices=StoryCategory.choices, default=StoryCategory.SUCCESS)
     alumni_name = models.CharField(max_length=150)
     company_name = models.CharField(max_length=180, blank=True)
     role_title = models.CharField(max_length=180, blank=True)
