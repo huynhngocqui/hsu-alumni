@@ -83,6 +83,39 @@ class PublicPageDetailView(APIView):
         return Response(PublicArticleSerializer(article).data)
 
 
+class PublicArticleListView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        queryset = Article.objects.filter(status=PublishableModel.Status.PUBLISHED).exclude(
+            article_type=Article.ArticleType.PAGE
+        )
+
+        article_type = request.query_params.get('article_type', '').strip().upper()
+        if article_type in Article.ArticleType.values:
+            queryset = queryset.filter(article_type=article_type)
+
+        limit = request.query_params.get('limit', '').strip()
+        if limit.isdigit():
+            queryset = queryset[: int(limit)]
+
+        return Response(PublicArticleSerializer(queryset, many=True).data)
+
+
+class PublicArticleDetailView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, slug):
+        article = (
+            Article.objects.filter(status=PublishableModel.Status.PUBLISHED, slug=slug)
+            .exclude(article_type=Article.ArticleType.PAGE)
+            .first()
+        )
+        if article is None:
+            raise NotFound('Article not found.')
+        return Response(PublicArticleSerializer(article).data)
+
+
 class PublicGalleryListView(APIView):
     permission_classes = [permissions.AllowAny]
 

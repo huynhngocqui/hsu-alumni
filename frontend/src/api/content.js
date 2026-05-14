@@ -21,6 +21,10 @@ export function listArticles(params = '') {
   return apiClient.get(`/content/articles${params}`);
 }
 
+export function getArticleDetail(slug) {
+  return apiClient.get(`/content/articles/${slug}`);
+}
+
 export function listAlumniStories(params = '') {
   return apiClient.get(`/content/alumni-stories${params}`);
 }

@@ -2,6 +2,8 @@ import { Navigate } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
 import FeatureShellPage from '../components/common/FeatureShellPage';
 import HomePage from '../pages/home/HomePage';
+import PublicArticleDetailPage from '../pages/content/PublicArticleDetailPage';
+import PublicArticleListPage from '../pages/content/PublicArticleListPage';
 import PublicContentPage from '../pages/content/PublicContentPage';
 import PublicGalleryPage from '../pages/content/PublicGalleryPage';
 import PublicStoriesPage from '../pages/content/PublicStoriesPage';
@@ -16,6 +18,22 @@ export const publicRoutes = [
     element: <MainLayout />,
     children: [
       { index: true, element: <HomePage /> },
+      {
+        path: 'tin-tuc-su-kien/tin-tuc',
+        element: <PublicArticleListPage articleType="NEWS" eyebrow="Tin tức & Sự kiện" title="Tin tức Alumni" description="Danh sách tin tức được publish từ CMS nội bộ." breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Tin tức & Sự kiện' }, { label: 'Tin tức' }]} detailBasePath="/tin-tuc-su-kien/tin-tuc" emptyTitle="Chưa có tin tức" emptyMessage="Admin chưa publish bài viết tin tức nào." />,
+      },
+      {
+        path: 'tin-tuc-su-kien/tin-tuc/:slug',
+        element: <PublicArticleDetailPage />,
+      },
+      {
+        path: 'tin-tuc-su-kien/su-kien',
+        element: <PublicArticleListPage articleType="EVENT" eyebrow="Tin tức & Sự kiện" title="Sự kiện Alumni" description="Các sự kiện dành cho cộng đồng alumni được quản lý từ CMS." breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Tin tức & Sự kiện' }, { label: 'Sự kiện' }]} detailBasePath="/tin-tuc-su-kien/su-kien" emptyTitle="Chưa có sự kiện" emptyMessage="Admin chưa publish sự kiện nào." />,
+      },
+      {
+        path: 'tin-tuc-su-kien/su-kien/:slug',
+        element: <PublicArticleDetailPage />,
+      },
       {
         path: 'gioi-thieu/dinh-huong-hoat-dong',
         element: <PublicContentPage pageSlug="dinh-huong-hoat-dong" eyebrow="Giới thiệu" title="Định hướng hoạt động Alumni" description="Nội dung giới thiệu được quản lý từ CMS public pages." breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Giới thiệu' }, { label: 'Định hướng hoạt động' }]} />,
@@ -70,6 +88,14 @@ export const publicRoutes = [
       },
       { path: 'viec-lam-ket-noi/hoa-sen-job', element: <JobListPage /> },
       { path: 'viec-lam-ket-noi/hoa-sen-job/:id', element: <JobDetailPage /> },
+      {
+        path: 'viec-lam-ket-noi/career-webinars',
+        element: <PublicArticleListPage articleType="WEBINAR" eyebrow="Việc làm & Kết nối" title="Career Webinars" description="Danh sách webinar hướng nghiệp và kết nối nghề nghiệp cho alumni." breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Việc làm & Kết nối' }, { label: 'Career Webinars' }]} detailBasePath="/viec-lam-ket-noi/career-webinars" emptyTitle="Chưa có webinar" emptyMessage="Admin chưa publish webinar nào." />,
+      },
+      {
+        path: 'viec-lam-ket-noi/career-webinars/:slug',
+        element: <PublicArticleDetailPage />,
+      },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

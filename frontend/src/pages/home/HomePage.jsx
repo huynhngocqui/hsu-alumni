@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import BrandImage from '../../components/common/BrandImage';
 import { siteMeta } from '../../config/site';
 import { ArrowRightIcon, ExternalLinkIcon } from '../../components/common/icons';
+import { listArticles } from '../../api/content';
 import {
   achievementItems,
   alumniStories,
@@ -14,6 +16,18 @@ import {
   newsItems,
   serviceLinks,
 } from './home.config';
+
+function formatDate(value) {
+  if (!value) {
+    return 'Sắp cập nhật';
+  }
+
+  return new Date(value).toLocaleDateString('vi-VN', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+}
 
 function ActionLink({ item, className, children }) {
   if (item.external) {
@@ -68,6 +82,57 @@ function HomePage() {
   const heroBanner = siteMeta.brandAssets?.home?.heroBanner;
   const commBanner = siteMeta.brandAssets?.home?.commBanner;
   const benefitImages = [siteMeta.brandAssets?.home?.icon, siteMeta.brandAssets?.home?.icon1, siteMeta.brandAssets?.home?.icon2];
+  const [newsFeed, setNewsFeed] = useState(newsItems);
+  const [eventFeed, setEventFeed] = useState(eventItems);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadFeeds() {
+      try {
+        const [newsResponse, eventResponse] = await Promise.all([
+          listArticles('?article_type=NEWS&limit=3'),
+          listArticles('?article_type=EVENT&limit=3'),
+        ]);
+
+        if (!active) {
+          return;
+        }
+
+        if (Array.isArray(newsResponse) && newsResponse.length) {
+          setNewsFeed(
+            newsResponse.map((item) => ({
+              title: item.title,
+              category: 'Tin tức',
+              description: item.excerpt || 'Nội dung đang được cập nhật.',
+              href: `/tin-tuc-su-kien/tin-tuc/${item.slug}`,
+            }))
+          );
+        }
+
+        if (Array.isArray(eventResponse) && eventResponse.length) {
+          setEventFeed(
+            eventResponse.map((item) => ({
+              title: item.title,
+              date: formatDate(item.published_at),
+              location: item.excerpt || 'Đang cập nhật địa điểm',
+              href: `/tin-tuc-su-kien/su-kien/${item.slug}`,
+            }))
+          );
+        }
+      } catch {
+        if (active) {
+          setNewsFeed(newsItems);
+          setEventFeed(eventItems);
+        }
+      }
+    }
+
+    loadFeeds();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <div className='space-y-12'>
@@ -284,23 +349,24 @@ function HomePage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.34em] text-brand-red">Tin tức</p>
                 <h2 className="section-heading mt-4">Tin tức cần hỗ trợ featured item và danh sách card ngắn cùng một nhịp thị giác.</h2>
               </div>
-              <a
-                href="https://www.hoasen.edu.vn/tin-tuc/"
-                target="_blank"
-                rel="noreferrer noopener"
-                className="hidden items-center gap-2 text-sm font-semibold text-brand lg:inline-flex"
-              >
+              <Link to="/tin-tuc-su-kien/tin-tuc" className="hidden items-center gap-2 text-sm font-semibold text-brand lg:inline-flex">
                 Xem tất cả
-                <ExternalLinkIcon className="h-4 w-4" />
-              </a>
+                <ArrowRightIcon className="h-4 w-4" />
+              </Link>
             </div>
 
             <div className="mt-6 space-y-4">
-              {newsItems.map((item) => (
+              {newsFeed.map((item) => (
                 <article key={item.title} className="rounded-[22px] border border-slate-200 px-5 py-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-red">{item.category}</p>
                   <h3 className="mt-3 text-lg font-semibold text-brand-ink">{item.title}</h3>
                   <p className="mt-3 text-sm leading-7 text-slate-600">{item.description}</p>
+                  {item.href ? (
+                    <Link to={item.href} className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand">
+                      Xem chi tiết
+                      <ArrowRightIcon className="h-4 w-4" />
+                    </Link>
+                  ) : null}
                 </article>
               ))}
             </div>
@@ -312,23 +378,24 @@ function HomePage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.34em] text-brand-red">Sự kiện</p>
                 <h2 className="section-heading mt-4">Event section nên có ngày, địa điểm và điểm nhấn CTA đủ rõ để quét nhanh.</h2>
               </div>
-              <a
-                href="https://www.hoasen.edu.vn/event/"
-                target="_blank"
-                rel="noreferrer noopener"
-                className="hidden items-center gap-2 text-sm font-semibold text-brand lg:inline-flex"
-              >
+              <Link to="/tin-tuc-su-kien/su-kien" className="hidden items-center gap-2 text-sm font-semibold text-brand lg:inline-flex">
                 Xem tất cả
-                <ExternalLinkIcon className="h-4 w-4" />
-              </a>
+                <ArrowRightIcon className="h-4 w-4" />
+              </Link>
             </div>
 
             <div className="mt-6 space-y-4">
-              {eventItems.map((item) => (
+              {eventFeed.map((item) => (
                 <article key={item.title} className="rounded-[22px] bg-brand-sand px-5 py-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-red">{item.date}</p>
                   <h3 className="mt-3 text-lg font-semibold text-brand-ink">{item.title}</h3>
                   <p className="mt-2 text-sm text-slate-500">{item.location}</p>
+                  {item.href ? (
+                    <Link to={item.href} className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand">
+                      Xem chi tiết
+                      <ArrowRightIcon className="h-4 w-4" />
+                    </Link>
+                  ) : null}
                 </article>
               ))}
             </div>
