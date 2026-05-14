@@ -2,20 +2,73 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { registerUser } from '../../api/auth';
+import { lookupPeopleSoftProfile } from '../../api/integrations';
 import AuthPageHeading from '../../components/auth/AuthPageHeading';
+import { registerSchema } from '../../validation/registerSchema';
 
 function RegisterPage() {
   const [status, setStatus] = useState({ type: '', message: '' });
+  const [lookupState, setLookupState] = useState({ type: '', message: '', profile: null });
   const {
     register,
     handleSubmit,
+    setError,
+    setValue,
+    clearErrors,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm();
+
+  const applySchemaErrors = (values) => {
+    const parsed = registerSchema.safeParse(values);
+    if (parsed.success) {
+      return parsed.data;
+    }
+
+    parsed.error.issues.forEach((issue) => {
+      const fieldName = issue.path[0];
+      if (fieldName) {
+        setError(fieldName, { type: 'manual', message: issue.message });
+      }
+    });
+    return null;
+  };
+
+  const runPeopleSoftLookup = async () => {
+    const identifiers = {
+      identity_id: getValues('identity_id'),
+      student_id: getValues('student_id'),
+      email: getValues('email'),
+    };
+
+    const response = await lookupPeopleSoftProfile(identifiers);
+    const profile = response.profile;
+    for (const [fieldName, value] of Object.entries(profile)) {
+      if (fieldName === 'peoplesoft_id' || value == null) {
+        continue;
+      }
+      setValue(fieldName, value, { shouldDirty: true, shouldValidate: true });
+    }
+
+    setLookupState({
+      type: 'success',
+      message: `Đã xác thực hồ sơ PeopleSoft: ${profile.peoplesoft_id}`,
+      profile,
+    });
+    return profile;
+  };
 
   const onSubmit = handleSubmit(async (values) => {
     try {
       setStatus({ type: '', message: '' });
-      await registerUser(values);
+      clearErrors();
+      const parsedValues = applySchemaErrors(values);
+      if (!parsedValues) {
+        return;
+      }
+
+      await runPeopleSoftLookup();
+      await registerUser(parsedValues);
       setStatus({
         type: 'success',
         message: 'Đăng ký thành công. Hệ thống sẽ gửi email thiết lập mật khẩu khi tài khoản được xác thực.',
@@ -30,7 +83,7 @@ function RegisterPage() {
       <AuthPageHeading
         eyebrow="Đăng ký"
         title="Tạo tài khoản Alumni"
-        description="Form này là khung đầu tiên cho luồng đăng ký thành viên, bao gồm các trường chính trong BRD để sau đó nối PeopleSoft lookup và validation chi tiết hơn."
+        description="Luồng đăng ký hiện đã nối PeopleSoft lookup mock ở môi trường dev và validation schema-based để kiểm tra hồ sơ alumni trước khi gửi đăng ký."
       />
 
       <form className="mt-8 grid gap-5 md:grid-cols-2" onSubmit={onSubmit}>
@@ -83,9 +136,38 @@ function RegisterPage() {
 
         <div className="md:col-span-2">
           <div className="rounded-2xl border border-dashed border-brand/30 bg-brand-sand/70 px-4 py-3 text-sm text-slate-600">
-            Giai đoạn tiếp theo sẽ nối thêm PeopleSoft lookup theo CCCD, CAPTCHA và validation schema-based chi tiết theo business rules.
+            Demo PeopleSoft records hiện hỗ trợ tra cứu nhanh với CCCD: `079203009999`, `079203008888`, `079203007777`.
           </div>
         </div>
+
+        <div className="md:col-span-2 flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={async () => {
+              try {
+                setStatus({ type: '', message: '' });
+                clearErrors();
+                await runPeopleSoftLookup();
+              } catch (error) {
+                setLookupState({ type: 'error', message: error.message || 'Không tìm thấy hồ sơ PeopleSoft.', profile: null });
+              }
+            }}
+          >
+            Tra cứu PeopleSoft
+          </button>
+          {lookupState.message ? (
+            <p className={`text-sm ${lookupState.type === 'error' ? 'text-red-600' : 'text-emerald-600'}`}>
+              {lookupState.message}
+            </p>
+          ) : null}
+        </div>
+
+        {lookupState.profile ? (
+          <div className="md:col-span-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-600">
+            Hồ sơ đối chiếu: {lookupState.profile.full_name} {lookupState.profile.last_name} · {lookupState.profile.major} · khóa {lookupState.profile.intake_year}-{lookupState.profile.graduation_year}
+          </div>
+        ) : null}
 
         {status.message ? (
           <p className={`md:col-span-2 text-sm ${status.type === 'error' ? 'text-red-600' : 'text-emerald-600'}`}>

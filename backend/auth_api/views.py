@@ -3,6 +3,7 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from users.repositories import sync_user_document_if_enabled
 from users.serializers import UserSerializer
 
 from .serializers import (
@@ -20,6 +21,7 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        sync_user_document_if_enabled(user)
         return Response(
             {
                 'detail': 'Registration submitted successfully. Account is pending verification.',
@@ -55,6 +57,7 @@ class LoginView(APIView):
             )
 
         login(request, user)
+        sync_user_document_if_enabled(user)
         return Response({'detail': 'Login successful.', 'user': UserSerializer(user).data})
 
 

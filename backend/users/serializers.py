@@ -3,30 +3,33 @@ from rest_framework import serializers
 from .models import User
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = [
-            'id',
-            'email',
-            'full_name',
-            'last_name',
-            'student_id',
-            'phone_number',
-            'major',
-            'academic_degree',
-            'mode_of_study',
-            'intake_year',
-            'graduation_year',
-            'current_company',
-            'position',
-            'avatar_url',
-            'interest_tags',
-            'account_status',
-            'job_seeking_status',
-            'role',
-        ]
-        read_only_fields = ['id', 'account_status', 'role']
+class FlexibleIdField(serializers.Field):
+    def to_representation(self, value):
+        if isinstance(value, int):
+            return value
+
+        return str(value)
+
+
+class UserSerializer(serializers.Serializer):
+    id = FlexibleIdField()
+    email = serializers.EmailField()
+    full_name = serializers.CharField()
+    last_name = serializers.CharField(allow_blank=True)
+    student_id = serializers.CharField(allow_blank=True)
+    phone_number = serializers.CharField(allow_blank=True)
+    major = serializers.CharField(allow_blank=True)
+    academic_degree = serializers.CharField(allow_blank=True)
+    mode_of_study = serializers.CharField(allow_blank=True)
+    intake_year = serializers.IntegerField(allow_null=True)
+    graduation_year = serializers.IntegerField(allow_null=True)
+    current_company = serializers.CharField(allow_blank=True)
+    position = serializers.CharField(allow_blank=True)
+    avatar_url = serializers.CharField(allow_blank=True)
+    interest_tags = serializers.ListField(child=serializers.CharField())
+    account_status = serializers.CharField()
+    job_seeking_status = serializers.BooleanField()
+    role = serializers.CharField()
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):

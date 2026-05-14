@@ -2,6 +2,10 @@ import AdminLayout from '../components/layout/AdminLayout';
 import FeatureShellPage from '../components/common/FeatureShellPage';
 import AdminRoute from './AdminRoute';
 import AdminDashboardPage from '../pages/admin/AdminDashboardPage';
+import AdminArticlesPage from '../pages/admin/AdminArticlesPage';
+import AdminGalleryPage from '../pages/admin/AdminGalleryPage';
+import AdminStoriesPage from '../pages/admin/AdminStoriesPage';
+import AdminTagsPage from '../pages/admin/AdminTagsPage';
 
 export const adminRoutes = [
   {
@@ -25,39 +29,19 @@ export const adminRoutes = [
           },
           {
             path: 'admin/content/articles',
-            element: (
-              <FeatureShellPage
-                breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Admin', to: '/admin' }, { label: 'Quản lý bài viết CMS' }]}
-                eyebrow="Admin"
-                title="Quản lý bài viết CMS"
-                description="Khu vực quản trị bài viết Tin tức, Sự kiện, Career Webinars và các trang nội dung cộng đồng."
-                highlights={['CRUD bài viết', 'Publish / unpublish', 'Nhúng hyperlink ra HSU website']}
-              />
-            ),
+            element: <AdminArticlesPage />,
+          },
+          {
+            path: 'admin/content/stories',
+            element: <AdminStoriesPage />,
           },
           {
             path: 'admin/content/gallery',
-            element: (
-              <FeatureShellPage
-                breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Admin', to: '/admin' }, { label: 'Duyệt thư viện ảnh' }]}
-                eyebrow="Admin"
-                title="Duyệt thư viện ảnh"
-                description="Module duyệt link Google Drive do Alumni đóng góp trước khi hiển thị lên gallery công khai."
-                highlights={['Danh sách pending', 'Approve / reject', 'Gắn album']}
-              />
-            ),
+            element: <AdminGalleryPage />,
           },
           {
             path: 'admin/tags',
-            element: (
-              <FeatureShellPage
-                breadcrumbItems={[{ label: 'Trang chủ', to: '/' }, { label: 'Admin', to: '/admin' }, { label: 'Quản lý taxonomy tags' }]}
-                eyebrow="Admin"
-                title="Quản lý taxonomy tags"
-                description="Taxonomy dùng chung cho Profile, Co-op và Job sẽ được quản lý tập trung tại đây."
-                highlights={['Tạo / sửa / xóa tag', 'Áp dụng cho matching engine']}
-              />
-            ),
+            element: <AdminTagsPage />,
           },
         ],
       },

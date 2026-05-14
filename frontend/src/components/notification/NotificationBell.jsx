@@ -1,10 +1,20 @@
 import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { NotificationContext } from '../../context/NotificationContext';
 import { BellIcon } from '../common/icons';
 
 function NotificationBell() {
-  const { items, unreadCount, markAllAsRead } = useContext(NotificationContext);
+  const navigate = useNavigate();
+  const { items, unreadCount, markAllAsRead, markAsRead } = useContext(NotificationContext);
   const [open, setOpen] = useState(false);
+
+  const handleItemClick = async (item) => {
+    await markAsRead(item.id);
+    setOpen(false);
+    if (item.url) {
+      navigate(item.url);
+    }
+  };
 
   return (
     <div className="relative">
@@ -28,7 +38,7 @@ function NotificationBell() {
         <div className="panel absolute right-0 top-14 z-20 w-80 p-4" role="dialog" aria-label="Thông báo">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="font-semibold">Thông báo</h3>
-            <button type="button" className="text-sm text-brand" onClick={markAllAsRead}>
+            <button type="button" className="text-sm text-brand" onClick={() => markAllAsRead()}>
               Đánh dấu đã đọc
             </button>
           </div>
@@ -36,13 +46,18 @@ function NotificationBell() {
           {items.length ? (
             <div className="space-y-3">
               {items.map((item) => (
-                <div key={item.id} className="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3">
+                <button
+                  key={item.id}
+                  type="button"
+                  className="block w-full rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-left"
+                  onClick={() => handleItemClick(item)}
+                >
                   <div className="flex items-center gap-2">
                     <h4 className="text-sm font-semibold">{item.title}</h4>
                     {!item.read ? <span className="h-2 w-2 rounded-full bg-brand" /> : null}
                   </div>
                   <p className="mt-2 text-sm text-slate-500">{item.message}</p>
-                </div>
+                </button>
               ))}
             </div>
           ) : (

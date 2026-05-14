@@ -1,53 +1,43 @@
-from django.db.models import Q
-from rest_framework import generics, permissions
+from rest_framework import permissions, status
+from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .models import CoopListing
+from engagement.services import notify_coop_listing_created
+
+from .repositories import get_coop_repository
 from .serializers import CoopListingCreateSerializer, CoopListingSerializer
 
 
-class CoopListingListCreateView(generics.ListCreateAPIView):
+class CoopListingListCreateView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get_queryset(self):
-        queryset = CoopListing.objects.filter(status=CoopListing.Status.PUBLISHED).select_related('owner')
-        search = self.request.query_params.get('search', '').strip()
-        tag = self.request.query_params.get('tag', '').strip().lower()
+    def get(self, request):
+        repository = get_coop_repository()
+        listings = repository.list_published(
+            search=request.query_params.get('search', '').strip(),
+            tag=request.query_params.get('tag', '').strip().lower(),
+        )
+        serializer = CoopListingSerializer(listings, many=True)
+        return Response(serializer.data)
 
-        if search:
-            queryset = queryset.filter(
-                Q(name__icontains=search)
-                | Q(description__icontains=search)
-                | Q(business_name__icontains=search)
-            )
-
-        if tag:
-            listing_ids = [
-                listing.id
-                for listing in queryset
-                if any(str(item).strip().lower() == tag for item in listing.category_tags)
-            ]
-            queryset = queryset.filter(id__in=listing_ids)
-
-        return queryset
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return CoopListingCreateSerializer
-        return CoopListingSerializer
-
-    def perform_create(self, serializer):
-        serializer.save()
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+    def post(self, request):
+        serializer = CoopListingCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        listing = serializer.save()
-        output = CoopListingSerializer(listing, context=self.get_serializer_context())
-        return Response(output.data, status=201)
+        listing = get_coop_repository().create_listing(request.user, serializer.validated_data)
+        notify_coop_listing_created(listing, request.user)
+        output = CoopListingSerializer(listing)
+        return Response(output.data, status=status.HTTP_201_CREATED)
 
 
-class CoopListingDetailView(generics.RetrieveAPIView):
-    queryset = CoopListing.objects.select_related('owner').all()
-    serializer_class = CoopListingSerializer
+class CoopListingDetailView(APIView):
     permission_classes = [permissions.AllowAny]
+
+    def get(self, request, pk):
+        listing = get_coop_repository().get_listing(pk)
+
+        if listing is None:
+            raise NotFound('Co-op listing not found.')
+
+        serializer = CoopListingSerializer(listing)
+        return Response(serializer.data)

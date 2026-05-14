@@ -1,7 +1,36 @@
 from pathlib import Path
 import os
 
+from dotenv import dotenv_values
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+for env_values in (dotenv_values(BASE_DIR / '.env'), dotenv_values(BASE_DIR / '.env.local')):
+    for key, value in env_values.items():
+        if value is not None and key not in os.environ:
+            os.environ[key] = value
+
+
+def _is_windows_absolute_path(value):
+    return len(value) >= 3 and value[1] == ':' and value[2] in {'/', '\\'}
+
+
+def _resolve_sqlite_name(env_name, default_name='db.sqlite3'):
+    raw_value = os.getenv(env_name)
+    if not raw_value:
+        return BASE_DIR / default_name
+
+    if _is_windows_absolute_path(raw_value):
+        if os.name == 'nt':
+            return Path(raw_value)
+        return BASE_DIR / Path(raw_value).name
+
+    path_value = Path(raw_value).expanduser()
+    if path_value.is_absolute():
+        return path_value
+
+    return BASE_DIR / path_value
+
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'unsafe-dev-secret-key')
 DEBUG = False
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
@@ -16,6 +45,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'auth_api',
+    'content',
+    'engagement',
+    'integrations',
     'users',
     'tags',
     'coop',
@@ -57,9 +89,22 @@ ASGI_APPLICATION = 'hsu_alumni.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.sqlite3'),
-        'NAME': os.getenv('DB_NAME', BASE_DIR / 'db.sqlite3'),
+        'NAME': _resolve_sqlite_name('DB_NAME'),
     }
 }
+
+MONGODB_ENABLED = os.getenv('MONGODB_ENABLED', '0') == '1'
+MONGODB_URI = os.getenv('MONGODB_URI', '')
+MONGODB_DB_NAME = os.getenv('MONGODB_DB_NAME', '')
+MONGODB_AUTH_SOURCE = os.getenv('MONGODB_AUTH_SOURCE', '')
+MONGODB_USERNAME = os.getenv('MONGODB_USERNAME', '')
+MONGODB_PASSWORD = os.getenv('MONGODB_PASSWORD', '')
+MONGODB_TLS = os.getenv('MONGODB_TLS', '0') == '1'
+MONGODB_TAGS_COLLECTION = os.getenv('MONGODB_TAGS_COLLECTION', 'tags')
+MONGODB_COOP_COLLECTION = os.getenv('MONGODB_COOP_COLLECTION', 'coop_listings')
+MONGODB_JOB_LISTINGS_COLLECTION = os.getenv('MONGODB_JOB_LISTINGS_COLLECTION', 'job_listings')
+MONGODB_JOB_APPLICATIONS_COLLECTION = os.getenv('MONGODB_JOB_APPLICATIONS_COLLECTION', 'job_applications')
+MONGODB_USERS_COLLECTION = os.getenv('MONGODB_USERS_COLLECTION', 'users')
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},

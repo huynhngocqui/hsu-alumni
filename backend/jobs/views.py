@@ -1,69 +1,77 @@
-from django.db.models import Q
-from django.shortcuts import get_object_or_404
-from rest_framework import generics, parsers, permissions
+from rest_framework import parsers, permissions, status
+from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .models import JobListing
-from .serializers import JobApplicationSerializer, JobListingCreateSerializer, JobListingSerializer
+from engagement.services import notify_job_application_created, notify_job_listing_created
+
+from .repositories import get_job_repository
+from .serializers import (
+    JobApplicationCreateSerializer,
+    JobApplicationSerializer,
+    JobListingCreateSerializer,
+    JobListingSerializer,
+)
 
 
-class JobListingListCreateView(generics.ListCreateAPIView):
+class JobListingListCreateView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get_queryset(self):
-        queryset = JobListing.objects.filter(status=JobListing.Status.PUBLISHED).select_related('owner')
-        search = self.request.query_params.get('search', '').strip()
-        tag = self.request.query_params.get('tag', '').strip().lower()
+    def get(self, request):
+        repository = get_job_repository()
+        listings = repository.list_published(
+            search=request.query_params.get('search', '').strip(),
+            tag=request.query_params.get('tag', '').strip().lower(),
+        )
+        serializer = JobListingSerializer(listings, many=True)
+        return Response(serializer.data)
 
-        if search:
-            queryset = queryset.filter(
-                Q(job_name__icontains=search)
-                | Q(job_position__icontains=search)
-                | Q(job_description__icontains=search)
-                | Q(company_name__icontains=search)
-            )
-
-        if tag:
-            listing_ids = [
-                listing.id
-                for listing in queryset
-                if any(str(item).strip().lower() == tag for item in listing.category_tags)
-            ]
-            queryset = queryset.filter(id__in=listing_ids)
-
-        return queryset
-
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return JobListingCreateSerializer
-        return JobListingSerializer
-
-    def perform_create(self, serializer):
-        serializer.save()
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+    def post(self, request):
+        serializer = JobListingCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        listing = serializer.save()
-        output = JobListingSerializer(listing, context=self.get_serializer_context())
-        return Response(output.data, status=201)
+        listing = get_job_repository().create_listing(request.user, serializer.validated_data)
+        notify_job_listing_created(listing, request.user)
+        output = JobListingSerializer(listing)
+        return Response(output.data, status=status.HTTP_201_CREATED)
 
 
-class JobListingDetailView(generics.RetrieveAPIView):
-    queryset = JobListing.objects.select_related('owner').all()
-    serializer_class = JobListingSerializer
+class JobListingDetailView(APIView):
     permission_classes = [permissions.AllowAny]
 
+    def get(self, request, pk):
+        listing = get_job_repository().get_listing(pk)
 
-class JobApplicationCreateView(generics.CreateAPIView):
-    serializer_class = JobApplicationSerializer
+        if listing is None:
+            raise NotFound('Job listing not found.')
+
+        serializer = JobListingSerializer(listing)
+        return Response(serializer.data)
+
+
+class JobApplicationCreateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     parser_classes = [parsers.MultiPartParser, parsers.FormParser]
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context['job_listing'] = self.get_job_listing()
-        return context
+    def post(self, request, pk):
+        repository = get_job_repository()
+        listing = repository.get_listing(pk)
 
-    def get_job_listing(self):
-        return get_object_or_404(JobListing, pk=self.kwargs['pk'])
+        if listing is None:
+            raise NotFound('Job listing not found.')
+
+        serializer = JobApplicationCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        if listing['owner'] == request.user.id:
+            raise ValidationError('You cannot apply to your own job posting.')
+
+        if not request.user.job_seeking_status:
+            raise ValidationError('You must enable job seeking status in your profile before applying.')
+
+        if repository.application_exists(listing, request.user.id):
+            raise ValidationError('You have already applied to this job.')
+
+        application = repository.create_application(listing, request.user, serializer.validated_data)
+        notify_job_application_created(listing, request.user, application)
+        output = JobApplicationSerializer(application)
+        return Response(output.data, status=status.HTTP_201_CREATED)

@@ -1,8 +1,8 @@
 export const heroContent = {
   eyebrow: 'HSU Alumni',
-  title: 'Kết nối nhiều thế hệ Hoa Sen trong một không gian số đồng nhất và dễ tiếp cận.',
+  title: 'Sứ mệnh cộng đồng Alumni',
   description:
-    'Trang chủ mới cần phản ánh đúng tinh thần HSU Alumni: nhận diện rõ ràng, nhiều khoảng trắng, section card dễ quét và điều hướng mạch lạc giữa cộng đồng, dịch vụ Alumni và cơ hội kết nối.',
+    'Mạng lưới cựu sinh viên Trường Đại học Hoa Sen là cầu nối gắn kết nhiều thế hệ Hoa Sen qua từng chặng đường học tập và trưởng thành. Không chỉ là nơi để ôn lại kỷ niệm, chia sẻ câu chuyện thành công, mà còn lan tỏa những giá trị tốt đẹp.',
   primaryAction: {
     label: 'Gia nhập cộng đồng',
     href: '/dang-ky',
@@ -67,30 +67,30 @@ export const achievementItems = [
 export const experienceItems = [
   {
     title: 'Giao lưu gặp gỡ',
-    description: 'Tạo cảm giác gần gũi và có chiều sâu cho các nội dung tái ngộ, họp mặt và chia sẻ hành trình Alumni.',
+    description: 'Những buổi tái ngộ nhiều thế hệ Hoa Sen, nơi chia sẻ kỷ niệm, kinh nghiệm và tạo dựng giá trị kết nối bền vững, gắn kết lâu dài.',
   },
   {
     title: 'Mentoring',
-    description: 'Nhấn mạnh vai trò kết nối người đi trước và người đang trên hành trình phát triển nghề nghiệp.',
+    description: 'Kết nối cựu sinh viên và sinh viên, đồng hành và định hướng nghề nghiệp qua mentor-mentee, workshop và kinh nghiệm thực tiễn.',
   },
   {
     title: 'Kết nối doanh nghiệp',
-    description: 'Dẫn tới các dịch vụ và cơ hội hợp tác với ngôn ngữ giao diện rõ, tin cậy và định hướng hành động.',
+    description: 'Xây dựng cầu nối giữa cựu sinh viên và doanh nghiệp, mở ra cơ hội hợp tác, tuyển dụng và phát triển bền vững cùng nhau.',
   },
 ];
 
 export const benefitItems = [
   {
     title: 'Kết nối cộng đồng',
-    description: 'Mở ra không gian giao lưu, chia sẻ kinh nghiệm và duy trì mối liên kết với hệ sinh thái Hoa Sen.',
+    description: 'Kết nối cộng đồng cựu sinh viên, mở ra cơ hội giao lưu, chia sẻ, hợp tác và phát triển bền vững.',
   },
   {
     title: 'Phát triển nghề nghiệp',
-    description: 'Hỗ trợ tiếp cận cơ hội việc làm, webinar, mentoring và các điểm chạm với doanh nghiệp.',
+    description: 'Tiếp cận cơ hội việc làm, mentoring và workshop kỹ năng, cùng đồng hành và hợp tác để phát triển sự nghiệp.',
   },
   {
     title: 'Học tập & tiện ích',
-    description: 'Đưa Alumni tới những dịch vụ như COOP, Shop, Courses và Thư viện bằng luồng điều hướng nhất quán.',
+    description: 'Các chương trình tri ân, giảm học phí cho các thế hệ sau và ưu đãi độc quyền từ đối tác doanh nghiệp dành cho Alumni.',
   },
 ];
 

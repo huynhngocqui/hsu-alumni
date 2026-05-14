@@ -4,6 +4,7 @@ const adminLinks = [
   { to: '/admin', label: 'Tổng quan' },
   { to: '/admin/users', label: 'Tài khoản' },
   { to: '/admin/content/articles', label: 'Bài viết' },
+  { to: '/admin/content/stories', label: 'Alumni stories' },
   { to: '/admin/content/gallery', label: 'Thư viện ảnh' },
   { to: '/admin/tags', label: 'Tags' },
 ];

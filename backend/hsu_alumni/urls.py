@@ -11,6 +11,10 @@ def healthcheck(_request):
 urlpatterns = [
     path('api/health/', healthcheck, name='healthcheck'),
     path('api/auth/', include('auth_api.urls')),
+    path('api/', include('engagement.urls')),
+    path('api/integrations/', include('integrations.urls')),
+    path('api/admin/', include('content.admin_urls')),
+    path('api/admin/', include('tags.admin_urls')),
     path('api/users/', include('users.urls')),
     path('api/tags/', include('tags.urls')),
     path('api/coop/', include('coop.urls')),

@@ -1,23 +1,54 @@
-import { createContext, useMemo, useState } from 'react';
+import { createContext, useEffect, useMemo, useState } from 'react';
+
+import { listNotifications, markAllNotificationsAsRead, markNotificationAsRead } from '../api/notifications';
+import { useAuth } from '../hooks/useAuth';
 
 export const NotificationContext = createContext({
   items: [],
   unreadCount: 0,
   pushNotification: () => {},
+  markAsRead: async () => {},
   markAllAsRead: () => {},
+  refreshNotifications: async () => [],
 });
 
-const INITIAL_NOTIFICATIONS = [
-  {
-    id: 'welcome',
-    title: 'Bắt đầu hoàn thiện hồ sơ',
-    message: 'Hãy cập nhật lĩnh vực quan tâm để hệ thống có thể gợi ý Co-op và việc làm phù hợp.',
-    read: false,
-  },
-];
-
 export function NotificationProvider({ children }) {
-  const [items, setItems] = useState(INITIAL_NOTIFICATIONS);
+  const { isAuthenticated, isAuthReady } = useAuth();
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    let active = true;
+
+    async function bootstrapNotifications() {
+      if (!isAuthReady) {
+        return;
+      }
+
+      if (!isAuthenticated) {
+        if (active) {
+          setItems([]);
+        }
+        return;
+      }
+
+      try {
+        const nextItems = await listNotifications();
+        if (active) {
+          setItems(nextItems);
+        }
+      } catch {
+        if (active) {
+          setItems([]);
+        }
+      }
+    }
+
+    bootstrapNotifications();
+
+    return () => {
+      active = false;
+    };
+  }, [isAuthReady, isAuthenticated]);
 
   const value = useMemo(
     () => ({
@@ -26,11 +57,38 @@ export function NotificationProvider({ children }) {
       pushNotification: (notification) => {
         setItems((current) => [{ ...notification, read: false }, ...current]);
       },
-      markAllAsRead: () => {
-        setItems((current) => current.map((item) => ({ ...item, read: true })));
+      markAsRead: async (id) => {
+        if (!isAuthenticated) {
+          setItems((current) => current.map((item) => (item.id === id ? { ...item, read: true } : item)));
+          return null;
+        }
+
+        const updated = await markNotificationAsRead(id);
+        setItems((current) => current.map((item) => (item.id === id ? updated : item)));
+        return updated;
+      },
+      markAllAsRead: async () => {
+        if (!isAuthenticated) {
+          setItems((current) => current.map((item) => ({ ...item, read: true })));
+          return [];
+        }
+
+        const nextItems = await markAllNotificationsAsRead();
+        setItems(nextItems);
+        return nextItems;
+      },
+      refreshNotifications: async () => {
+        if (!isAuthenticated) {
+          setItems([]);
+          return [];
+        }
+
+        const nextItems = await listNotifications();
+        setItems(nextItems);
+        return nextItems;
       },
     }),
-    [items],
+    [isAuthenticated, items],
   );
 
   return <NotificationContext.Provider value={value}>{children}</NotificationContext.Provider>;

@@ -4,8 +4,6 @@ export const footerConfig = {
   brand: {
     eyebrow: 'HSU Alumni',
     title: 'Đại học Hoa Sen',
-    description:
-      'Cổng kết nối cộng đồng cựu sinh viên, dịch vụ Alumni và những cơ hội đồng hành cùng hệ sinh thái Hoa Sen.',
   },
   campuses: [
     {
@@ -109,5 +107,5 @@ export const footerConfig = {
       ],
     },
   ],
-  copyright: 'Bản quyền thuộc về Trường Đại học Hoa Sen.',
+  copyright: 'Trường Đại học Hoa Sen.',
 };

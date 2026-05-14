@@ -39,7 +39,6 @@ function Footer() {
   const footerBackground = siteMeta.brandAssets?.footer?.background;
   const footerStyle = footerBackground
     ? {
-        backgroundImage: `linear-gradient(135deg, rgba(4, 37, 82, 0.96) 0%, rgba(2, 26, 58, 0.94) 48%, rgba(2, 20, 44, 0.96) 100%), url(${footerBackground})`,
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
@@ -47,27 +46,24 @@ function Footer() {
     : undefined;
 
   return (
-    <footer className="mt-auto bg-brand-dark text-white" style={footerStyle}>
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-        <div className="grid gap-8 lg:grid-cols-[1.05fr_1.15fr_0.8fr_0.8fr]">
-          <div className="space-y-5">
-            <BrandImage
-              src={footerBrandLogo}
-              alt={`${footerConfig.brand.title} footer brand`}
-              className="h-auto max-h-[90px] w-auto max-w-full object-contain"
-              fallback={
-                <div className="space-y-2">
-                  <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/70">{footerConfig.brand.eyebrow}</p>
-                  <h2 className="text-3xl font-extrabold uppercase tracking-[0.04em]">{footerConfig.brand.title}</h2>
-                  <div className="h-1.5 w-24 rounded-full bg-brand-red" />
-                </div>
-              }
-            />
+    <footer className="mt-auto bg-[#034ea1] text-white" style={footerStyle}>
+      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8 lg:py-5">
+        <div className="space-y-5">
+          <BrandImage
+            src={footerBrandLogo}
+            alt={`${footerConfig.brand.title} footer brand`}
+            className="h-auto max-h-[123px] w-auto max-w-full object-contain"
+            fallback={
+              <div className="space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.35em] text-white/70">{footerConfig.brand.eyebrow}</p>
+                <h2 className="text-3xl font-extrabold uppercase tracking-[0.04em]">{footerConfig.brand.title}</h2>
+                <div className="h-1.5 w-24 rounded-full bg-brand-red" />
+              </div>
+            }
+          />
+        </div>
 
-            <p className="max-w-md text-sm leading-7 text-white/76">{footerConfig.brand.description}</p>
-            <p className="max-w-md text-xs leading-6 text-white/55">{siteMeta.footerReferenceNote}</p>
-          </div>
-
+        <div className="grid gap-8 lg:grid-cols-[2.2fr_0.8fr_0.6fr_0.8fr] mt-6 border-t border-white/[0.1] pt-6">
           <div className="space-y-5">
             <div>
               <h3 className="text-lg font-semibold text-white">Thông tin liên hệ</h3>
@@ -125,7 +121,6 @@ function Footer() {
                         >
                           {group.type === 'social' && SocialIcon ? <SocialIcon className="h-5 w-5 text-white" /> : null}
                           <span>{link.label}</span>
-                          {link.external && group.type !== 'social' ? <ExternalLinkIcon className="h-3.5 w-3.5" /> : null}
                         </FooterLink>
                       </li>
                     );
@@ -136,9 +131,8 @@ function Footer() {
           ))}
         </div>
 
-        <div className="mt-10 border-t border-white/12 pt-5 text-sm text-white/62 lg:flex lg:items-center lg:justify-between">
-          <p>{footerConfig.copyright}</p>
-          <p className="mt-3 lg:mt-0">{footerConfig.referenceNote || siteMeta.footerReferenceNote}</p>
+        <div className="mt-5 pt-5 text-sm text-white/62">
+          <p>Bản quyền thuộc về <a href="https://www.hoasen.edu.vn/" target="_blank" rel="noreferrer noopener" className='text-[#70b4ff]'>{footerConfig.copyright}</a></p>
         </div>
       </div>
     </footer>

@@ -13,6 +13,9 @@ const navbarFontStyle = {
   fontFamily: "'Inter', 'Roboto', sans-serif",
 };
 
+const SCROLL_ENTER_THRESHOLD = 104;
+const SCROLL_EXIT_THRESHOLD = 14;
+
 function matchesPath(pathname, matcher) {
   if (!matcher) {
     return false;
@@ -56,7 +59,7 @@ function InlineNavLink({ item, className, children, onNavigate }) {
 
 function Navbar() {
   const location = useLocation();
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, isAuthReady, user, logout } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [openDesktopMenu, setOpenDesktopMenu] = useState('');
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
@@ -105,16 +108,41 @@ function Navbar() {
   }, [openMobileMenu]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const nextScrolled = window.scrollY > 18;
-      setIsScrolled((current) => (current === nextScrolled ? current : nextScrolled));
+    let frameId = 0;
+
+    const syncScrollState = () => {
+      const currentScrollY = window.scrollY;
+
+      setIsScrolled((current) => {
+        if (current) {
+          return currentScrollY > SCROLL_EXIT_THRESHOLD;
+        }
+
+        return currentScrollY >= SCROLL_ENTER_THRESHOLD;
+      });
+
+      frameId = 0;
     };
 
-    handleScroll();
+    const handleScroll = () => {
+      if (frameId) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(syncScrollState);
+    };
+
+    syncScrollState();
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
 
     return () => {
+      if (frameId) {
+        window.cancelAnimationFrame(frameId);
+      }
+
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
     };
   }, []);
 
@@ -177,6 +205,10 @@ function Navbar() {
   };
 
   const renderTopBarAction = () => {
+    if (!isAuthReady) {
+      return null;
+    }
+
     if (isAuthenticated) {
       return (
         <div className="hidden items-center gap-2 lg:flex">
@@ -206,6 +238,10 @@ function Navbar() {
   };
 
   const renderCompactDesktopAction = () => {
+    if (!isAuthReady) {
+      return null;
+    }
+
     if (!isScrolled) {
       return null;
     }
@@ -239,6 +275,10 @@ function Navbar() {
   };
 
   const renderMobileAction = () => {
+    if (!isAuthReady) {
+      return null;
+    }
+
     if (isAuthenticated) {
       return (
         <div className="space-y-3 border-t border-slate-200 pt-5">
@@ -275,7 +315,7 @@ function Navbar() {
       </p>
       <div className="mt-1 flex min-w-0 items-center gap-3">
         <p
-          className={`truncate text-base font-extrabold uppercase tracking-[0.02em] transition-all duration-300 ${
+          className={`truncate text-base font-medium transition-all duration-300 ${
             isScrolled ? 'text-white sm:text-[1.02rem]' : 'text-[#102345] sm:text-[1.22rem]'
           }`}
         >
@@ -446,7 +486,7 @@ function Navbar() {
       <header
         ref={shellRef}
         style={navbarFontStyle}
-        className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+        className={`sticky top-0 z-20 w-full transition-all duration-300 ${
           isScrolled
             ? 'border-b border-[#003B77]/30 bg-[#0054A6] shadow-[0_16px_36px_rgba(0,46,96,0.24)]'
             : 'border-b border-slate-200/90 bg-white/95 shadow-[0_8px_24px_rgba(15,23,42,0.06)] backdrop-blur'
@@ -570,24 +610,22 @@ function Navbar() {
               })}
             </nav>
 
-            <div className="flex items-center gap-3">
-              {renderCompactDesktopAction()}
+            {renderCompactDesktopAction()}
 
-              <button
-                type="button"
-                className={`inline-flex h-11 w-11 items-center justify-center rounded-full border transition-all duration-300 xl:hidden ${
-                  isScrolled
-                    ? 'border-white/20 bg-white/10 text-white hover:bg-white/16'
-                    : 'border-[#0054A6]/12 bg-white text-[#0054A6] shadow-[0_14px_30px_rgba(0,84,166,0.12)] hover:border-[#0054A6]/30 hover:bg-[#EFF5FB]'
-                }`}
-                onClick={() => setOpenMobileMenu(true)}
-                aria-label="Mở menu"
-                aria-expanded={openMobileMenu}
-                aria-controls="mobile-site-menu"
-              >
-                <MenuIcon className="h-5 w-5" />
-              </button>
-            </div>
+            <button
+              type="button"
+              className={`inline-flex h-11 w-11 items-center justify-center rounded-full border transition-all duration-300 xl:hidden ${
+                isScrolled
+                  ? 'border-white/20 bg-white/10 text-white hover:bg-white/16'
+                  : 'border-[#0054A6]/12 bg-white text-[#0054A6] shadow-[0_14px_30px_rgba(0,84,166,0.12)] hover:border-[#0054A6]/30 hover:bg-[#EFF5FB]'
+              }`}
+              onClick={() => setOpenMobileMenu(true)}
+              aria-label="Mở menu"
+              aria-expanded={openMobileMenu}
+              aria-controls="mobile-site-menu"
+            >
+              <MenuIcon className="h-5 w-5" />
+            </button>
           </div>
         </div>
       </header>
