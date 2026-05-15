@@ -155,7 +155,7 @@ function EventForm({ initial, onSaved, onCancel }) {
       <RichTextEditor label="Nội dung tiếng Việt" value={contentVi} onChange={(value) => setValue('content_vi', value, { shouldDirty: true })} />
       <RichTextEditor label="Nội dung tiếng Anh" value={contentEn} onChange={(value) => setValue('content_en', value, { shouldDirty: true })} />
 
-      <div className="space-y-3 rounded-[24px] border border-slate-200 bg-slate-50 px-4 py-4">
+      {/* <div className="space-y-3 rounded-[24px] border border-slate-200 bg-slate-50 px-4 py-4">
         <div className="flex items-center justify-between gap-4">
           <div>
             <h3 className="text-lg font-semibold text-brand-ink">Gallery ảnh</h3>
@@ -186,7 +186,7 @@ function EventForm({ initial, onSaved, onCancel }) {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       <div className="grid gap-5 lg:grid-cols-2">
         <label className="block">

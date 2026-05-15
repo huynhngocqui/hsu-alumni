@@ -123,7 +123,8 @@ function AlumniDetailPage() {
       </div>
 
       <AlumniProfileHeader alumni={post} lang={lang} onLangToggle={setLang} />
-      <AlumniArticleContent content={articleContent} galleryImages={post.gallery_images} />
+      {/* <AlumniArticleContent content={articleContent} galleryImages={post.gallery_images} /> */}
+      <AlumniArticleContent content={articleContent} />
     </>
   );
 }

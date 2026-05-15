@@ -115,7 +115,7 @@ function EventDetailPage() {
         </aside>
       </section>
 
-      <EventGallery images={event.gallery_images || []} />
+      {/* <EventGallery images={event.gallery_images || []} /> */}
     </div>
   );
 }

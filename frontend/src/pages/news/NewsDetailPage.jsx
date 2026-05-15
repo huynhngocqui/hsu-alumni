@@ -126,12 +126,12 @@ function NewsDetailPage() {
         <RelatedNewsSidebar categories={post.related_categories || []} items={post.related_news || []} />
       </section>
 
-      <ImageGallerySection
+      {/* <ImageGallerySection
         images={post.gallery_images || []}
         eyebrow="Gallery ảnh"
         title="Hình ảnh trong bài viết"
         imageAltPrefix="Hình ảnh tin tức"
-      />
+      /> */}
     </div>
   );
 }
