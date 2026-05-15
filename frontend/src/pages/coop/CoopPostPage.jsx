@@ -43,7 +43,7 @@ function CoopPostPage() {
       ? current.filter((item) => item !== tag)
       : [...current, tag];
 
-    setValue('category_tags', next.join(', '), { shouldDirty: true });
+    setValue('category_tags', next.join(', '), { shouldDirty: true, shouldValidate: true });
   };
 
   const onSubmit = handleSubmit(async (values) => {

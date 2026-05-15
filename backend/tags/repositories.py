@@ -50,6 +50,17 @@ class MongoTagRepository:
     def _ensure_indexes(self):
         indexes = self.collection.index_information()
 
+        legacy_index = indexes.get('legacy_id_1')
+        legacy_partial_filter = {'legacy_id': {'$exists': True, '$ne': None}}
+        if legacy_index and legacy_index.get('partialFilterExpression') != legacy_partial_filter:
+            self.collection.drop_index('legacy_id_1')
+
+        self.collection.create_index(
+            'legacy_id',
+            unique=True,
+            partialFilterExpression=legacy_partial_filter,
+        )
+
         for index_name, field_name in (('name_1', 'name'), ('slug_1', 'slug')):
             index_spec = indexes.get(index_name)
             if index_spec and not index_spec.get('unique'):

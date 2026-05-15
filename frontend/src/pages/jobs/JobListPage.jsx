@@ -153,6 +153,11 @@ function JobListPage() {
                   <p className="mt-2 text-sm font-medium text-slate-500">
                     {listing.job_position} • {listing.company_name}
                   </p>
+                  {[listing.employment_type, listing.work_location].filter(Boolean).length ? (
+                    <p className="mt-1 text-sm text-slate-500">
+                      {[listing.employment_type, listing.work_location].filter(Boolean).join(' • ')}
+                    </p>
+                  ) : null}
                 </div>
                 <span className="rounded-full bg-brand-sand px-3 py-1 text-xs font-semibold text-brand">
                   {formatDate(listing.created_at)}

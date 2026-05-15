@@ -18,9 +18,15 @@ from .serializers import (
 
 
 class CurrentUserView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
 
     def get(self, request):
+        if not request.user.is_authenticated:
+            return Response(None)
+
         user_payload = get_user_repository().get_current_user(request.user)
         return Response(UserSerializer(user_payload).data)
 

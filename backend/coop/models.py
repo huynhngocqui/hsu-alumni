@@ -4,7 +4,9 @@ from django.db import models
 
 class CoopListing(models.Model):
     class Status(models.TextChoices):
+        DRAFT = 'DRAFT', 'Draft'
         PUBLISHED = 'PUBLISHED', 'Published'
+        CLOSED = 'CLOSED', 'Closed'
         ARCHIVED = 'ARCHIVED', 'Archived'
 
     owner = models.ForeignKey(
@@ -17,6 +19,7 @@ class CoopListing(models.Model):
     description = models.TextField(blank=True)
     image_url = models.URLField(blank=True)
     category_tags = models.JSONField(default=list, blank=True)
+    views_count = models.PositiveIntegerField(default=0)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PUBLISHED)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

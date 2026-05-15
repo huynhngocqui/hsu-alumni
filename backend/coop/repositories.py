@@ -10,6 +10,18 @@ from db.mongodb import get_mongo_collection
 from .models import CoopListing
 
 
+def _normalize_tag_list(value):
+    raw_items = value.split(',') if isinstance(value, str) else value or []
+    normalized = []
+    for item in raw_items:
+        if isinstance(item, dict):
+            item = item.get('name') or item.get('slug') or item.get('label') or ''
+        text = str(item).strip()
+        if text and text not in normalized:
+            normalized.append(text)
+    return normalized
+
+
 def _serialize_listing_document(document):
     return {
         'id': str(document.get('_id', document.get('id'))),
@@ -19,8 +31,10 @@ def _serialize_listing_document(document):
         'name': document.get('name', ''),
         'description': document.get('description', ''),
         'image_url': document.get('image_url', ''),
-        'category_tags': document.get('category_tags', []),
+        'category_tags': _normalize_tag_list(document.get('category_tags', [])),
         'status': document.get('status', CoopListing.Status.PUBLISHED),
+        'views_count': document.get('views_count', 0),
+        'applications_count': 0,
         'created_at': document.get('created_at'),
         'updated_at': document.get('updated_at'),
     }
@@ -35,8 +49,10 @@ def _serialize_orm_listing(listing):
         'name': listing.name,
         'description': listing.description,
         'image_url': listing.image_url,
-        'category_tags': listing.category_tags,
+        'category_tags': _normalize_tag_list(listing.category_tags),
         'status': listing.status,
+        'views_count': listing.views_count,
+        'applications_count': 0,
         'created_at': listing.created_at,
         'updated_at': listing.updated_at,
     }
@@ -57,7 +73,7 @@ class DjangoOrmCoopRepository:
             listing_ids = [
                 listing.id
                 for listing in queryset
-                if any(str(item).strip().lower() == tag for item in listing.category_tags)
+                if any(item.lower() == tag for item in _normalize_tag_list(listing.category_tags))
             ]
             queryset = queryset.filter(id__in=listing_ids)
 
@@ -80,6 +96,55 @@ class DjangoOrmCoopRepository:
         listing.refresh_from_db(fields=[])
         return _serialize_orm_listing(CoopListing.objects.select_related('owner').get(pk=listing.pk))
 
+    def list_owner_listings(self, owner_id, search='', status_filter='', type_filter=''):
+        if type_filter and type_filter != 'coop':
+            return []
+
+        queryset = CoopListing.objects.filter(owner_id=owner_id).select_related('owner')
+        if search:
+            queryset = queryset.filter(
+                Q(name__icontains=search)
+                | Q(description__icontains=search)
+                | Q(business_name__icontains=search)
+            )
+        if status_filter:
+            queryset = queryset.filter(status=status_filter)
+        return [_serialize_orm_listing(listing) | {'type': 'coop'} for listing in queryset]
+
+    def update_listing(self, listing, owner_id, payload):
+        if str(listing['owner']) != str(owner_id):
+            return None
+        try:
+            model = CoopListing.objects.get(pk=int(listing['id']), owner_id=owner_id)
+        except (CoopListing.DoesNotExist, TypeError, ValueError):
+            return None
+        for field in ['name', 'description', 'image_url', 'category_tags', 'status']:
+            if field in payload:
+                setattr(model, field, payload[field])
+        model.save()
+        return _serialize_orm_listing(CoopListing.objects.select_related('owner').get(pk=model.pk))
+
+    def close_listing(self, listing, owner_id):
+        return self.update_listing(listing, owner_id, {'status': CoopListing.Status.CLOSED})
+
+    def delete_listing(self, listing, owner_id):
+        if str(listing['owner']) != str(owner_id):
+            return False
+        CoopListing.objects.filter(pk=int(listing['id']), owner_id=owner_id).delete()
+        return True
+
+    def duplicate_listing(self, listing, owner):
+        created = CoopListing.objects.create(
+            owner=owner,
+            business_name=listing.get('business_name') or owner.current_company or owner.full_name,
+            name=f"{listing['name']} (Copy)",
+            description=listing.get('description', ''),
+            image_url=listing.get('image_url', ''),
+            category_tags=listing.get('category_tags', []),
+            status=CoopListing.Status.DRAFT,
+        )
+        return _serialize_orm_listing(CoopListing.objects.select_related('owner').get(pk=created.pk))
+
 
 class MongoCoopRepository:
     def __init__(self, collection_name):
@@ -96,7 +161,8 @@ class MongoCoopRepository:
             ]
 
         if tag:
-            query['category_tags'] = {'$regex': f'^{re.escape(tag)}$', '$options': 'i'}
+            escaped_tag = re.escape(tag)
+            query['category_tags'] = {'$regex': f'(^|,\\s*){escaped_tag}(\\s*,|$)', '$options': 'i'}
 
         documents = self.collection.find(query).sort('created_at', -1)
         return [_serialize_listing_document(document) for document in documents]
@@ -128,7 +194,67 @@ class MongoCoopRepository:
             'description': payload.get('description', ''),
             'image_url': payload.get('image_url', ''),
             'category_tags': payload['category_tags'],
+            'views_count': 0,
             'status': CoopListing.Status.PUBLISHED,
+            'created_at': now,
+            'updated_at': now,
+        }
+        result = self.collection.insert_one(document)
+        document['_id'] = result.inserted_id
+        return _serialize_listing_document(document)
+
+    def list_owner_listings(self, owner_id, search='', status_filter='', type_filter=''):
+        if type_filter and type_filter != 'coop':
+            return []
+
+        query = {'owner_legacy_id': owner_id}
+        if status_filter:
+            query['status'] = status_filter
+        if search:
+            query['$or'] = [
+                {'name': {'$regex': re.escape(search), '$options': 'i'}},
+                {'description': {'$regex': re.escape(search), '$options': 'i'}},
+                {'business_name': {'$regex': re.escape(search), '$options': 'i'}},
+            ]
+        return [
+            _serialize_listing_document(document) | {'type': 'coop'}
+            for document in self.collection.find(query).sort('created_at', -1)
+        ]
+
+    def update_listing(self, listing, owner_id, payload):
+        if str(listing['owner']) != str(owner_id):
+            return None
+        updates = {
+            field: payload[field]
+            for field in ['name', 'description', 'image_url', 'category_tags', 'status']
+            if field in payload
+        }
+        updates['updated_at'] = timezone.now()
+        self.collection.update_one({'_id': ObjectId(str(listing['id']))}, {'$set': updates})
+        return self.get_listing(listing['id'])
+
+    def close_listing(self, listing, owner_id):
+        return self.update_listing(listing, owner_id, {'status': CoopListing.Status.CLOSED})
+
+    def delete_listing(self, listing, owner_id):
+        if str(listing['owner']) != str(owner_id):
+            return False
+        self.collection.delete_one({'_id': ObjectId(str(listing['id']))})
+        return True
+
+    def duplicate_listing(self, listing, owner):
+        now = timezone.now()
+        document = {
+            'owner_legacy_id': owner.id,
+            'owner_email': owner.email,
+            'owner_name': owner.full_name,
+            'business_name': listing.get('business_name') or owner.current_company or owner.full_name,
+            'name': f"{listing['name']} (Copy)",
+            'description': listing.get('description', ''),
+            'image_url': listing.get('image_url', ''),
+            'category_tags': listing.get('category_tags', []),
+            'views_count': 0,
+            'status': CoopListing.Status.DRAFT,
             'created_at': now,
             'updated_at': now,
         }

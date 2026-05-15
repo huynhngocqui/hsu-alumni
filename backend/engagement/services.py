@@ -95,15 +95,28 @@ def notify_coop_listing_created(listing, owner):
 
 
 def notify_job_application_created(listing, applicant, application):
-    owner = User.objects.filter(id=listing['owner']).first()
+    try:
+        owner_id = int(listing['owner'])
+    except (TypeError, ValueError):
+        owner_id = None
+
+    owner = User.objects.filter(id=owner_id).first() if owner_id is not None else None
     if owner is not None:
         _create_notification(
             owner,
             Notification.Type.JOB_APPLICATION,
             f"Ứng tuyển mới cho {listing['job_name']}",
-            f"{applicant.full_name} vừa ứng tuyển vào tin {listing['job_name']}.",
+            f"{applicant.full_name} ({applicant.email}) vừa ứng tuyển vào tin {listing['job_name']}.",
             url=f"/viec-lam-ket-noi/hoa-sen-job/{listing['id']}",
-            payload={'listing_id': listing['id'], 'application_id': application['id'], 'applicant_id': applicant.id},
+            payload={
+                'listing_id': listing['id'],
+                'application_id': application['id'],
+                'applicant_id': applicant.id,
+                'applicant_name': applicant.full_name,
+                'applicant_email': applicant.email,
+                'cv_file': application.get('cv_file', ''),
+                'cover_note': application.get('cover_note', ''),
+            },
         )
 
     _create_notification(

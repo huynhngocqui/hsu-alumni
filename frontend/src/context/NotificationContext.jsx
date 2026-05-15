@@ -18,6 +18,20 @@ export function NotificationProvider({ children }) {
 
   useEffect(() => {
     let active = true;
+    let timerId;
+
+    async function refresh() {
+      try {
+        const nextItems = await listNotifications();
+        if (active) {
+          setItems(nextItems);
+        }
+      } catch {
+        if (active) {
+          setItems([]);
+        }
+      }
+    }
 
     async function bootstrapNotifications() {
       if (!isAuthReady) {
@@ -31,22 +45,17 @@ export function NotificationProvider({ children }) {
         return;
       }
 
-      try {
-        const nextItems = await listNotifications();
-        if (active) {
-          setItems(nextItems);
-        }
-      } catch {
-        if (active) {
-          setItems([]);
-        }
-      }
+      await refresh();
+      timerId = window.setInterval(refresh, 30000);
     }
 
     bootstrapNotifications();
 
     return () => {
       active = false;
+      if (timerId) {
+        window.clearInterval(timerId);
+      }
     };
   }, [isAuthReady, isAuthenticated]);
 

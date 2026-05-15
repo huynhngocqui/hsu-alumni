@@ -194,6 +194,78 @@ function Navbar() {
   const compactNotificationClass =
     '[&_button]:border-white/20 [&_button]:bg-white/10 [&_button]:text-white [&_button]:hover:border-white/35 [&_button]:hover:bg-white/16 [&_button>span]:bg-[#D6B24A] [&_button>span]:text-[#102345]';
 
+  const roleNavigation = isAuthenticated
+    ? [
+        {
+          id: 'nav-role-workspace',
+          label: 'Khu vực của tôi',
+          path: '/dashboard',
+          external: false,
+          target: '_self',
+          rel: '',
+          activeMatch: ['/dashboard', '/ho-so', '/admin'],
+          children: [
+            {
+              id: 'nav-role-dashboard',
+              label: 'Dashboard',
+              path: '/dashboard',
+              external: false,
+              target: '_self',
+              rel: '',
+              children: [],
+              activeMatch: ['/dashboard'],
+            },
+            {
+              id: 'nav-role-owner-posts',
+              label: 'Quản lý bài đăng',
+              path: '/dashboard/bai-dang',
+              external: false,
+              target: '_self',
+              rel: '',
+              children: [],
+              activeMatch: ['/dashboard/bai-dang'],
+            },
+            {
+              id: 'nav-role-applications',
+              label: 'Hồ sơ đã ứng tuyển',
+              path: '/dashboard/ung-tuyen',
+              external: false,
+              target: '_self',
+              rel: '',
+              children: [],
+              activeMatch: ['/dashboard/ung-tuyen'],
+            },
+            {
+              id: 'nav-role-profile',
+              label: 'Hồ sơ cá nhân',
+              path: '/ho-so',
+              external: false,
+              target: '_self',
+              rel: '',
+              children: [],
+              activeMatch: ['/ho-so'],
+            },
+            ...(user?.role === 'ADMIN'
+              ? [
+                  {
+                    id: 'nav-role-admin',
+                    label: 'Admin CMS',
+                    path: '/admin',
+                    external: false,
+                    target: '_self',
+                    rel: '',
+                    children: [],
+                    activeMatch: ['/admin'],
+                  },
+                ]
+              : []),
+          ],
+        },
+      ]
+    : [];
+
+  const navigationItems = [...mainNavigation, ...roleNavigation];
+
   const handleLogout = async () => {
     try {
       await logoutUser();
@@ -394,7 +466,7 @@ function Navbar() {
 
               <div className="px-5 py-6">
                 <nav className="space-y-3" aria-label="Mobile navigation">
-                  {mainNavigation.map((item) => {
+                  {navigationItems.map((item) => {
                     const active = isItemActive(item, location.pathname);
 
                     if (!item.children?.length) {
@@ -545,7 +617,7 @@ function Navbar() {
             </NavLink>
 
             <nav className="hidden flex-1 items-center justify-end gap-2 xl:flex" aria-label="Main navigation">
-              {mainNavigation.map((item) => {
+              {navigationItems.map((item) => {
                 const active = isItemActive(item, location.pathname);
 
                 if (!item.children?.length) {

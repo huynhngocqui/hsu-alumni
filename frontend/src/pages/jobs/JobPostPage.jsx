@@ -13,6 +13,9 @@ function JobPostPage() {
     defaultValues: {
       job_name: '',
       job_position: '',
+      employment_type: '',
+      work_location: '',
+      application_deadline: '',
       job_description: '',
       category_tags: '',
     },
@@ -43,13 +46,14 @@ function JobPostPage() {
       ? current.filter((item) => item !== tag)
       : [...current, tag];
 
-    setValue('category_tags', next.join(', '), { shouldDirty: true });
+    setValue('category_tags', next.join(', '), { shouldDirty: true, shouldValidate: true });
   };
 
   const onSubmit = handleSubmit(async (values) => {
     try {
       const payload = {
         ...values,
+        application_deadline: values.application_deadline || null,
         category_tags: values.category_tags
           .split(',')
           .map((item) => item.trim())
@@ -88,6 +92,25 @@ function JobPostPage() {
           <label>
             <span className="input-label">Chức vụ</span>
             <input className="input-field" {...register('job_position', { required: true })} />
+          </label>
+          <label>
+            <span className="input-label">Hình thức làm việc</span>
+            <select className="input-field" {...register('employment_type', { required: true })}>
+              <option value="">Chọn hình thức</option>
+              <option value="Toàn thời gian">Toàn thời gian</option>
+              <option value="Bán thời gian">Bán thời gian</option>
+              <option value="Thực tập">Thực tập</option>
+              <option value="Freelance">Freelance</option>
+              <option value="Theo dự án">Theo dự án</option>
+            </select>
+          </label>
+          <label>
+            <span className="input-label">Địa điểm làm việc</span>
+            <input className="input-field" placeholder="VD: Quận 1, TP.HCM / Remote" {...register('work_location', { required: true })} />
+          </label>
+          <label>
+            <span className="input-label">Hạn ứng tuyển</span>
+            <input className="input-field" type="date" {...register('application_deadline')} />
           </label>
           <label className="lg:col-span-2">
             <span className="input-label">Mô tả công việc</span>

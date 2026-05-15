@@ -52,6 +52,8 @@ def build_listing_document(listing):
         'company_name': listing.company_name,
         'job_name': listing.job_name,
         'job_position': listing.job_position,
+        'employment_type': listing.employment_type,
+        'work_location': listing.work_location,
         'job_description': listing.job_description,
         'category_tags': listing.category_tags,
         'status': listing.status,
