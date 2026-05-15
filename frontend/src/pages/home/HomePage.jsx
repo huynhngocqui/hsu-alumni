@@ -60,6 +60,7 @@ function fallbackStoryCards() {
     name: story.name,
     role: story.role,
     summary: story.summary,
+    image: story.image,
     href: index === 0 ? '/cong-dong-alumni/cuu-sinh-vien-tieu-bieu' : '/cong-dong-alumni/cau-chuyen-thanh-cong',
   }));
 }
@@ -202,7 +203,7 @@ function HomePage() {
     async function loadFeeds() {
       try {
         const [newsResponse, eventResponse, storyResponse, alumniResponse] = await Promise.all([
-          listNewsPosts({ limit: 3 }),
+          listNewsPosts({ limit: 4 }),
           listEvents({ limit: 3, event_status: 'UPCOMING' }),
           listPublicStories(),
           listAlumniPosts(),
@@ -253,6 +254,7 @@ function HomePage() {
                   ? 'Cựu sinh viên tiêu biểu'
                   : 'Câu chuyện thành công',
               summary: item.excerpt || item.body || 'Nội dung đang được cập nhật.',
+              image: item.featured_image_url,
               href: storyDetailPath(item),
             }))
           );
@@ -274,7 +276,7 @@ function HomePage() {
   }, []);
 
   const featuredNews = newsFeed[0];
-  const secondaryNews = newsFeed.slice(1);
+  const secondaryNews = newsFeed.slice(1, 4);
   const joinMajors = ['Quản trị kinh doanh', 'Marketing', 'Công nghệ thông tin', 'Thiết kế', 'Ngôn ngữ'];
 
   return (
@@ -471,13 +473,20 @@ function HomePage() {
             {communityStories.map((story, index) => (
               <article key={story.name} className="panel flex flex-col px-6 py-6">
                 <div className="flex items-center gap-4">
-                  <div className={`flex h-16 w-16 items-center justify-center rounded-full text-lg font-extrabold ${index === 0 ? 'bg-brand-sand text-brand' : index === 1 ? 'bg-[#e8f0fb] text-brand-dark' : 'bg-[#eef5ff] text-brand-red'}`}>
-                    {story.name
-                      .split(' ')
-                      .slice(-2)
-                      .map((part) => part.charAt(0))
-                      .join('')}
-                  </div>
+                  <BrandImage
+                    src={story.image}
+                    alt={story.name}
+                    className="h-16 w-16 rounded-full object-cover"
+                    fallback={
+                      <div className={`flex h-16 w-16 items-center justify-center rounded-full text-lg font-extrabold ${index === 0 ? 'bg-brand-sand text-brand' : index === 1 ? 'bg-[#e8f0fb] text-brand-dark' : 'bg-[#eef5ff] text-brand-red'}`}>
+                        {story.name
+                          .split(' ')
+                          .slice(-2)
+                          .map((part) => part.charAt(0))
+                          .join('')}
+                      </div>
+                    }
+                  />
                   <div>
                     <h3 className="text-lg font-semibold text-brand-ink">{story.name}</h3>
                     <p className="mt-1 text-sm text-slate-500">{story.role}</p>
