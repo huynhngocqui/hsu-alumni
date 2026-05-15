@@ -47,8 +47,8 @@ def load_source_tags(limit=0):
 
 def ensure_indexes(collection):
     collection.create_index('slug', unique=True)
-    collection.create_index('legacy_id', unique=True)
-    collection.create_index('name')
+    collection.create_index('legacy_id', unique=True, sparse=True)
+    collection.create_index('name', unique=True)
 
 
 def migrate_tags(tags):
