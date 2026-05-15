@@ -320,7 +320,7 @@ function HomePage() {
           </div>
         </section>
 
-        <section className="space-y-6">
+        {/* <section className="space-y-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.34em] text-brand-red">Thành tựu & dấu ấn</p>
@@ -345,89 +345,88 @@ function HomePage() {
               </article>
             ))}
           </div>
-        </section>
+        </section> */}
       </div>
 
-      <div className="bg-[#EEF4FB]">
-        <div className="page-shell">
+      <div>
+        <div className="bg-[#EEF4FB]">
+          <div className="page-shell">
+              <div className="text-center">
+                <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-brand-ink sm:text-[2.35rem]">
+                  Trải nghiệm cùng Alumni
+                </h2>
+              </div>
+
+              <div className="mt-8 grid gap-5 lg:grid-cols-3">
+                {experienceItems.map((item) => (
+                  <article key={item.title} className="overflow-hidden rounded-[22px] bg-white p-3 pb-6 shadow-[0_18px_38px_rgba(16,35,69,0.08)]">
+                    <BrandImage
+                      src={commBanner}
+                      alt={item.title}
+                      className="h-48 w-full rounded-[16px] object-cover"
+                      fallback={
+                        <div className="flex h-48 w-full items-center justify-center rounded-[16px] bg-slate-200 text-sm font-medium text-slate-500">
+                          Community banner
+                        </div>
+                      }
+                    />
+                    <div className="px-2 pb-2 pt-5">
+                      <h3 className="text-[1.45rem] font-extrabold leading-tight text-brand-ink">{item.title}</h3>
+                      <p className="mt-3 text-base leading-8 text-slate-600">{item.description}</p>
+                    </div>
+                  </article>
+                ))}
+            </div>
+          </div>
+        </div>
+
+        <div style={{ background: "linear-gradient(to bottom, #F2F7FF 0px, #F2F7FF calc(100% - 216px), #DEEAFF calc(100% - 216px), #DEEAFF calc(100% - 144px), #CDDEF8 calc(100% - 144px), #CDDEF8 100%)" }}>
+          <div className="page-shell">
             <div className="text-center">
               <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-brand-ink sm:text-[2.35rem]">
-                Trải nghiệm cùng Alumni
+                Lợi ích khi tham gia
               </h2>
             </div>
 
             <div className="mt-8 grid gap-5 lg:grid-cols-3">
-              {experienceItems.map((item) => (
-                <article key={item.title} className="overflow-hidden rounded-[22px] bg-white p-3 pb-6 shadow-[0_18px_38px_rgba(16,35,69,0.08)]">
-                  <BrandImage
-                    src={commBanner}
-                    alt={item.title}
-                    className="h-48 w-full rounded-[16px] object-cover"
-                    fallback={
-                      <div className="flex h-48 w-full items-center justify-center rounded-[16px] bg-slate-200 text-sm font-medium text-slate-500">
-                        Community banner
-                      </div>
-                    }
-                  />
-                  <div className="px-2 pb-2 pt-5">
-                    <h3 className="text-[1.45rem] font-extrabold leading-tight text-brand-ink">{item.title}</h3>
-                    <p className="mt-3 text-base leading-8 text-slate-600">{item.description}</p>
-                  </div>
-                </article>
-              ))}
-          </div>
-        </div>
-      </div>
+              {benefitItems.map((item, index) => (
+                  <article
+                    key={item.title}
+                    className="overflow-hidden rounded-[22px] bg-white px-3 py-6 shadow-[0_18px_38px_rgba(16,35,69,0.08)]"
+                  >
+                    <div className="flex justify-center">
+                    <BrandImage
+                      src={benefitImages[index]}
+                      alt={item.title}
+                      className="h-[80px] w-[80px] rounded-full object-cover"
+                      fallback={
+                        <div className="flex h-[80px] w-[80px] items-center justify-center rounded-full bg-slate-200 text-sm font-medium text-slate-500">
+                          Benefit banner
+                        </div>
+                      }
+                    />
+                    </div>
 
-      <div className="bg-[#DDEAFF]">
-        <div className="page-shell">
-          <div className="text-center">
-            <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-brand-ink sm:text-[2.35rem]">
-              Lợi ích khi tham gia
-            </h2>
-          </div>
+                    <div className="px-2 pb-2 pt-5 text-center">
+                      <h3 className="text-[1.45rem] font-extrabold leading-tight text-brand-ink">
+                        {item.title}
+                      </h3>
 
-          <div className="mt-8 grid gap-5 lg:grid-cols-3">
-             {benefitItems.map((item, index) => (
-                <article
-                  key={item.title}
-                  className="overflow-hidden rounded-[22px] bg-white px-3 py-6 shadow-[0_18px_38px_rgba(16,35,69,0.08)]"
-                >
-                  <div className="flex justify-center">
-                  <BrandImage
-                    src={benefitImages[index]}
-                    alt={item.title}
-                    className="h-[80px] w-[80px] rounded-full object-cover"
-                    fallback={
-                      <div className="flex h-[80px] w-[80px] items-center justify-center rounded-full bg-slate-200 text-sm font-medium text-slate-500">
-                        Benefit banner
-                      </div>
-                    }
-                  />
-                  </div>
-
-                  <div className="px-2 pb-2 pt-5 text-center">
-                    <h3 className="text-[1.45rem] font-extrabold leading-tight text-brand-ink">
-                      {item.title}
-                    </h3>
-
-                    <p className="mt-4 text-base text-slate-600">
-                      {item.description}
-                    </p>
-                  </div>
-                </article>
-              ))}
+                      <p className="mt-4 text-base text-slate-600">
+                        {item.description}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+            </div>
           </div>
         </div>
       </div>
             
       <div className="page-shell space-y-12">
-        <section className="space-y-6">
+        <section className="space-y-8">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.34em] text-brand-red">Kết nối cộng đồng</p>
-              <h2 className="mt-4 text-4xl font-extrabold tracking-tight text-brand-ink">Cộng đồng Alumni</h2>
-            </div>
+            <h2 className="text-4xl font-extrabold tracking-tight text-brand-ink">Cộng đồng Alumni</h2>
             <SectionMoreLink to="/cong-dong-alumni" />
           </div>
 
@@ -438,21 +437,20 @@ function HomePage() {
           </div>
         </section>
 
-        <section className="space-y-6">
+        <section className="space-y-8">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.34em] text-brand-red">Dịch vụ Alumni</p>
-              <h2 className="section-heading mt-4">Các dịch vụ và tiện ích nên được nhóm thành một cụm điều hướng trực quan, dễ scan trên cả desktop lẫn mobile.</h2>
+              <h2 className="section-heading mt-4">Dịch vụ Alumni</h2>
             </div>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-4">
             {serviceLinks.map((service) => (
               <ActionLink key={service.title} item={service} className="panel flex h-full flex-col px-5 py-6 transition hover:-translate-y-1 hover:shadow-2xl">
-                <span className="inline-flex w-fit rounded-full bg-brand-sand px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-brand-red">
+                {/* <span className="inline-flex w-fit rounded-full bg-brand-sand px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-brand-red">
                   Service
-                </span>
-                <h3 className="mt-4 text-xl font-semibold text-brand-ink">{service.title}</h3>
+                </span> */}
+                <h3 className="text-xl font-semibold text-brand-ink">{service.title}</h3>
                 <p className="mt-3 flex-1 text-sm leading-7 text-slate-600">{service.description}</p>
                 <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand">
                   Khám phá
@@ -463,12 +461,9 @@ function HomePage() {
           </div>
         </section>
 
-        <section className="space-y-6">
+        <section className="space-y-8">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.34em] text-brand-red">Câu chuyện Alumni</p>
-              <h2 className="section-heading mt-4">Những lát cắt truyền cảm hứng từ cộng đồng cựu sinh viên Hoa Sen.</h2>
-            </div>
+            <h2 className="section-heading mt-4">Những lát cắt truyền cảm hứng từ cộng đồng cựu sinh viên Hoa Sen.</h2>
             <SectionMoreLink to="/cong-dong-alumni/cau-chuyen-thanh-cong" label="Xem câu chuyện" />
           </div>
 
@@ -497,67 +492,80 @@ function HomePage() {
             ))}
           </div>
         </section>
+      </div>
 
-        <section className="relative overflow-hidden rounded-[36px] bg-[linear-gradient(180deg,#0457B8_0%,#0457B8_58%,#EDF4FF_58%,#EDF4FF_100%)]">
-          <div className="px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-            <div className="rounded-[30px] bg-white px-5 py-5 shadow-[0_22px_42px_rgba(16,35,69,0.1)] lg:px-6 lg:py-6">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h2 className="text-3xl font-extrabold tracking-tight text-brand-ink">Tin tức</h2>
-                </div>
-                <SectionMoreLink to="/tin-tuc" />
+      <section className="relative overflow-hidden bg-[linear-gradient(180deg,#0457B8_0%,#0457B8_58%,#EDF4FF_58%,#EDF4FF_100%)]">
+        <div className="page-shell">
+          <div className="rounded-[10px] bg-white px-5 py-6 shadow-[0_22px_42px_rgba(16,35,69,0.1)] lg:px-7 lg:py-7">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h2 className="text-3xl font-extrabold tracking-tight text-brand-ink">Tin tức</h2>
               </div>
+              <SectionMoreLink to="/tin-tuc" />
+            </div>
 
-              {featuredNews ? (
-                <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.22fr)_minmax(300px,0.78fr)]">
-                  <article className="min-w-0">
-                    <BrandImage
-                      src={featuredNews.image || heroBanner}
-                      alt={featuredNews.title}
-                      className="h-[260px] w-full rounded-[16px] object-cover lg:h-[320px]"
-                      fallback={<div className="h-[260px] w-full rounded-[16px] bg-slate-200 lg:h-[320px]" />}
-                    />
-                    <div className="mt-4 space-y-3">
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-red">{featuredNews.category || 'Tin tức Alumni'}</p>
-                      <h3 className="text-xl font-extrabold leading-tight text-brand-ink lg:text-[1.5rem]">{featuredNews.title}</h3>
-                      <p className="text-sm leading-7 text-slate-600">{featuredNews.description}</p>
-                      {featuredNews.href ? (
-                        <Link to={featuredNews.href} className="inline-flex items-center gap-2 text-sm font-semibold text-brand">
-                          Xem chi tiết
-                          <ArrowRightIcon className="h-4 w-4" />
+            {featuredNews ? (
+              <div className="mt-8 grid gap-6 xl:grid-cols-[1fr_1fr]">
+                <article className="min-w-0">
+                  {featuredNews.href ? (
+                    <Link to={featuredNews.href}>
+                      <BrandImage
+                        src={featuredNews.image || heroBanner}
+                        alt={featuredNews.title}
+                        className="h-[260px] w-full rounded-[10px] object-cover lg:h-[320px]"
+                        fallback={<div className="h-[260px] w-full rounded-[10px] bg-slate-200 lg:h-[320px]" />}
+                      />
+                      <div className="mt-4 space-y-3">
+                        <p className="text-xs font-bold uppercase tracking-[0.05em] text-brand-red">{featuredNews.category || 'Tin tức Alumni'}</p>
+                        <h3 className="text-md font-extrabold leading-tight text-brand-ink">{featuredNews.title}</h3>
+                        <p className="text-sm leading-6 text-slate-600">{featuredNews.description}</p>
+                      </div>
+                    </Link>
+                  ) : null}
+                </article>
+
+                <div className="space-y-4">
+                  {secondaryNews.map((item, index) => (
+                    <article
+                      key={item.title}
+                      className="border-b border-slate-200 pb-4 last:border-b-0 last:pb-0"
+                    >
+                      {item.href ? (
+                        <Link
+                          to={item.href}
+                          className="grid grid-cols-[240px_1fr] gap-4"
+                        >
+                          <BrandImage
+                            src={item.image || (index % 2 === 0 ? commBanner : heroBanner)}
+                            alt={item.title}
+                            className="h-[140px] w-full rounded-[12px] object-cover"
+                            fallback={
+                              <div className="h-[140px] w-full rounded-[12px] bg-slate-200" />
+                            }
+                          />
+
+                          <div className="min-w-0">
+                            <p className="text-[11px] font-bold uppercase tracking-[0.05em] text-brand-red">
+                              {item.category || 'Hoạt động Alumni'}
+                            </p>
+
+                            <h3 className="mt-2 line-clamp-3 text-[15px] font-bold leading-6 text-brand-ink">
+                              {item.title}
+                            </h3>
+                          </div>
                         </Link>
                       ) : null}
-                    </div>
-                  </article>
-
-                  <div className="space-y-4">
-                    {secondaryNews.map((item, index) => (
-                      <article key={item.title} className="grid gap-4 border-b border-slate-200 pb-4 last:border-b-0 last:pb-0 sm:grid-cols-[120px_minmax(0,1fr)]">
-                        <BrandImage
-                          src={item.image || (index % 2 === 0 ? commBanner : heroBanner)}
-                          alt={item.title}
-                          className="h-[88px] w-full rounded-[12px] object-cover"
-                          fallback={<div className="h-[88px] w-full rounded-[12px] bg-slate-200" />}
-                        />
-                        <div className="min-w-0">
-                          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-red">{item.category || 'Hoạt động Alumni'}</p>
-                          <h3 className="mt-2 text-sm font-bold leading-6 text-brand-ink">{item.title}</h3>
-                          {item.href ? (
-                            <Link to={item.href} className="mt-3 inline-flex items-center gap-2 text-xs font-semibold text-brand">
-                              Xem thêm
-                              <ArrowRightIcon className="h-3.5 w-3.5" />
-                            </Link>
-                          ) : null}
-                        </div>
-                      </article>
-                    ))}
-                  </div>
+                    </article>
+                  ))}
                 </div>
-              ) : null}
-            </div>
+              </div>
+            ) : null}
           </div>
-        </section>
+        </div>
+      </section>
 
+
+      <div className="page-shell space-y-12">
         <section className="space-y-6">
           <div className="flex items-start justify-between gap-4">
             <div>
@@ -568,12 +576,12 @@ function HomePage() {
 
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {eventFeed.map((item, index) => (
-              <article key={item.title} className="max-w-[280px] overflow-hidden rounded-[18px] border border-slate-200 bg-white p-2 shadow-[0_14px_30px_rgba(16,35,69,0.08)]">
+              <article key={item.title} className="w-full overflow-hidden rounded-[18px] border border-slate-200 bg-white p-3 shadow-[0_14px_30px_rgba(16,35,69,0.08)]">
                 <BrandImage
                   src={item.image || (index === 0 ? heroBanner : commBanner)}
                   alt={item.title}
-                  className="h-[170px] w-full rounded-[12px] object-cover"
-                  fallback={<div className="h-[170px] w-full rounded-[12px] bg-slate-200" />}
+                  className="h-[210px] w-full rounded-[12px] object-cover"
+                  fallback={<div className="h-[210px] w-full rounded-[12px] bg-slate-200" />}
                 />
                 <div className="px-3 pb-3 pt-4">
                   <h3 className="text-base font-bold leading-6 text-brand-ink">{item.title}</h3>
@@ -594,38 +602,25 @@ function HomePage() {
           </div>
         </section>
 
-        <section className="relative overflow-hidden rounded-[34px] bg-brand px-6 py-8 text-white lg:px-10 lg:py-10">
-          <span className="absolute left-6 top-6 h-4 w-4 bg-brand-red" />
-          <span className="absolute left-10 top-10 h-3 w-12 bg-[#0BB6FF]" />
+        <section className="relative overflow-hidden bg-brand px-6 py-8 text-white lg:px-10 lg:py-10">
+          <span className="absolute left-0 top-0 h-4 w-4 bg-brand-red" />
+          <span className="absolute left-0 top-5 h-3 w-12 bg-[#0BB6FF]" />
           <span className="absolute bottom-5 left-0 h-4 w-24 bg-[#0BB6FF]" />
           <span className="absolute bottom-0 right-0 h-5 w-5 bg-[#F7D600]" />
           <span className="absolute bottom-5 right-8 h-4 w-16 bg-[#0BB6FF]" />
           <span className="absolute bottom-9 right-0 h-4 w-8 bg-brand-red" />
 
-          <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_260px] xl:grid-cols-[minmax(0,1fr)_320px]">
-            <div>
+          <div className="relative grid gap-8 xl:grid-cols-[1fr_1fr]">
+            <div className="flex items-start justify-center gap-8 flex-col">
               <h2 className="text-3xl font-extrabold tracking-tight text-white">{joinSection.eyebrow}</h2>
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-white/80">
+              <p className="max-w-2xl text-sm leading-7 text-white/80">
                 Để lại thông tin để Alumni HSU kết nối bạn với cộng đồng, hoạt động nổi bật và các cơ hội nghề nghiệp phù hợp.
               </p>
-
-              <form className="mt-6 grid gap-3 sm:grid-cols-2" onSubmit={(event) => event.preventDefault()}>
-                <input className="rounded-[8px] border border-white/15 bg-white px-4 py-3 text-sm text-brand-ink outline-none placeholder:text-slate-400" placeholder="Họ và tên *" />
-                <input className="rounded-[8px] border border-white/15 bg-white px-4 py-3 text-sm text-brand-ink outline-none placeholder:text-slate-400" placeholder="Email" />
-                <input className="rounded-[8px] border border-white/15 bg-white px-4 py-3 text-sm text-brand-ink outline-none placeholder:text-slate-400" placeholder="Số điện thoại *" />
-                <input className="rounded-[8px] border border-white/15 bg-white px-4 py-3 text-sm text-brand-ink outline-none placeholder:text-slate-400" placeholder="Khóa *" />
-                <select className="rounded-[8px] border border-white/15 bg-white px-4 py-3 text-sm text-brand-ink outline-none">
-                  <option value="">Ngành *</option>
-                  {joinMajors.map((major) => (
-                    <option key={major} value={major}>{major}</option>
-                  ))}
-                </select>
-                <input className="rounded-[8px] border border-white/15 bg-white px-4 py-3 text-sm text-brand-ink outline-none placeholder:text-slate-400" placeholder="Năm tốt nghiệp *" />
-                <input className="rounded-[8px] border border-white/15 bg-white px-4 py-3 text-sm text-brand-ink outline-none placeholder:text-slate-400 sm:col-span-2" placeholder="Công việc hiện tại *" />
-                <button type="submit" className="rounded-[8px] bg-brand-red px-4 py-3 text-sm font-semibold text-white transition hover:bg-red-700 sm:col-span-2">
-                  Đăng ký tư vấn
-                </button>
-              </form>
+              <div>
+                <ActionLink item={heroContent.primaryAction} className="rounded-[8px] bg-brand-red px-4 py-3 text-sm font-semibold text-white transition hover:bg-red-700 sm:col-span-2">
+                  <span>{heroContent.primaryAction.label}</span>
+                </ActionLink>
+              </div>
             </div>
 
             <div className="overflow-hidden rounded-[10px] bg-white/12 p-3 backdrop-blur-sm">

@@ -7,7 +7,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { logoutUser } from '../../api/auth';
 import { mainNavigation, utilityNavigation } from '../../config/navigation';
 import { siteMeta } from '../../config/site';
-import { ChevronDownIcon, CloseIcon, ExternalLinkIcon, MenuIcon, PhoneIcon, SearchIcon } from '../common/icons';
+import { ChevronDownIcon, CloseIcon, MenuIcon, PhoneIcon, SearchIcon } from '../common/icons';
 
 const navbarFontStyle = {
   fontFamily: "'Inter', 'Roboto', sans-serif",
@@ -149,6 +149,7 @@ function Navbar() {
   const defaultLogo = siteMeta.brandAssets?.navbar?.defaultLogo;
   const compactLogo = siteMeta.brandAssets?.navbar?.compactLogo || defaultLogo;
   const mobileLogo = siteMeta.brandAssets?.navbar?.mobileLogo || defaultLogo;
+  const alumniLogo = siteMeta.brandAssets?.navbar?.alumniLogo || defaultLogo;
 
   const desktopNavItemClass = (active) =>
     [
@@ -169,14 +170,14 @@ function Navbar() {
     'inline-flex h-7 items-center justify-center rounded-full bg-white px-4 text-[13px] font-medium text-[#0054A6] transition duration-300 hover:bg-[#F4F8FF]';
 
   const desktopSecondaryActionClass = [
-    'inline-flex h-9 items-center justify-center rounded-full border px-5 text-sm font-medium transition-all duration-300',
+    'inline-flex h-9 items-center justify-center rounded-full border px-4 text-sm font-medium transition-all duration-300',
     isScrolled
       ? 'border-white/20 bg-white/10 text-white hover:border-white/35 hover:bg-white/16'
       : 'border-[#0054A6]/15 bg-white text-brand-ink hover:border-[#0054A6]/30 hover:bg-[#EFF5FB]',
   ].join(' ');
 
   const desktopPrimaryActionClass = [
-    'inline-flex h-9 items-center justify-center rounded-full px-5 text-sm font-medium transition-all duration-300',
+    'inline-flex h-9 items-center justify-center rounded-full px-4 text-sm font-medium transition-all duration-300',
     isScrolled
       ? 'bg-white text-[#0054A6] hover:bg-white/90'
       : 'bg-[#0054A6] text-white shadow-[0_14px_30px_rgba(0,84,166,0.18)] hover:bg-[#00458A]',
@@ -198,7 +199,7 @@ function Navbar() {
     ? [
         {
           id: 'nav-role-workspace',
-          label: 'Khu vực của tôi',
+          label: 'Hồ sơ',
           path: '/dashboard',
           external: false,
           target: '_self',
@@ -324,18 +325,12 @@ function Navbar() {
           <div className={compactNotificationClass}>
             <NotificationBell />
           </div>
-          <NavLink to="/dashboard" className={`${desktopSecondaryActionClass} max-w-[220px]`}>
-            <span className="truncate">{user?.full_name || 'Dashboard'}</span>
-          </NavLink>
-          <button type="button" className={desktopPrimaryActionClass} onClick={handleLogout}>
-            Đăng xuất
-          </button>
         </div>
       );
     }
 
     return (
-      <div className="hidden items-center gap-3 xl:flex">
+      <div className="hidden items-center gap-2 xl:flex">
         <NavLink to="/dang-nhap" className={desktopSecondaryActionClass}>
           Đăng nhập
         </NavLink>
@@ -431,14 +426,8 @@ function Navbar() {
                       alt={`${siteMeta.siteName} mobile logo`}
                       className="h-auto max-h-[54px] w-auto max-w-full object-contain"
                       fallback={
-                        <div className="flex items-center gap-4">
-                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-sm font-black tracking-[0.16em] text-[#0054A6]">
-                            HSU
-                          </div>
-                          <div>
-                            <p className="text-[10px] font-semibold uppercase tracking-[0.34em] text-[#FFF2C2]">HSU Alumni</p>
-                            <h2 className="mt-1 text-lg font-extrabold uppercase tracking-[0.04em] text-white">Đại học Hoa Sen</h2>
-                          </div>
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-sm font-black tracking-[0.16em] text-[#0054A6]">
+                          HSU
                         </div>
                       }
                     />
@@ -453,11 +442,7 @@ function Navbar() {
                   </button>
                 </div>
 
-                <div className="mt-5 flex flex-wrap items-center gap-3 rounded-[24px] border border-white/10 bg-white/10 px-4 py-3 text-sm text-white/90">
-                  <a href={siteMeta.primaryHotlineHref} className="inline-flex items-center gap-2 font-semibold text-white">
-                    <PhoneIcon className="h-4 w-4" />
-                    {siteMeta.primaryHotlineLabel}
-                  </a>
+                <div className="mt-3">
                   <span className="rounded-full border border-[#D6B24A]/40 bg-[#D6B24A]/16 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#FFF2C2]">
                     VI
                   </span>
@@ -482,7 +467,6 @@ function Navbar() {
                           onNavigate={() => setOpenMobileMenu(false)}
                         >
                           <span>{item.label}</span>
-                          {item.external ? <ExternalLinkIcon className="h-4 w-4" /> : null}
                         </InlineNavLink>
                       );
                     }
@@ -522,7 +506,6 @@ function Navbar() {
                                   <span className="mt-1 block text-xs leading-5 text-slate-500">{child.description}</span>
                                 ) : null}
                               </span>
-                              {child.external ? <ExternalLinkIcon className="mt-0.5 h-4 w-4 flex-none" /> : null}
                             </InlineNavLink>
                           ))}
                         </div>
@@ -540,7 +523,6 @@ function Navbar() {
                       onNavigate={() => setOpenMobileMenu(false)}
                     >
                       <span>{item.label}</span>
-                      <ExternalLinkIcon className="h-4 w-4" />
                     </InlineNavLink>
                   ))}
                 </div>
@@ -605,13 +587,23 @@ function Navbar() {
               isScrolled ? 'max-h-[60px] py-2.5' : 'max-h-[90px] py-2'
             } transition-all duration-300`}
           >
-            <NavLink to="/" className="flex min-w-0 items-center" aria-label="Trang chủ HSU Alumni">
+            <NavLink to="/" className="flex min-w-0 items-center gap-2" aria-label="Trang chủ HSU Alumni">
               <BrandImage
                 src={isScrolled ? compactLogo : defaultLogo}
                 alt={`${siteMeta.siteName} logo`}
                 className={`block h-auto w-auto max-w-full object-contain transition-all duration-300 ${
                   isScrolled ? 'max-h-[42px] sm:max-h-[46px]' : 'max-h-[66px] sm:max-h-[80px]'
                 }`}
+                fallback={brandFallback}
+              />
+
+              <BrandImage
+                src={alumniLogo}
+                alt={`${siteMeta.siteName} logo`}
+                className={`block h-auto w-auto max-w-full object-contain transition-all duration-300 ${
+                  isScrolled ? 'max-h-[30px] sm:max-h-[34px]' : 'max-h-[50px] sm:max-h-[56px]'
+                }`}
+                style={isScrolled ? { filter: 'brightness(0) invert(1)' } : {}}
                 fallback={brandFallback}
               />
             </NavLink>
@@ -624,7 +616,6 @@ function Navbar() {
                   return (
                     <InlineNavLink key={item.id} item={item} className={desktopNavItemClass(active)}>
                       <span>{item.label}</span>
-                      {item.external ? <ExternalLinkIcon className="h-3.5 w-3.5" /> : null}
                     </InlineNavLink>
                   );
                 }

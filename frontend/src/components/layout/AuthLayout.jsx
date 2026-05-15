@@ -1,33 +1,39 @@
 import { Link, Outlet } from 'react-router-dom';
+import BrandImage from '../common/BrandImage';
+import { siteMeta } from '../../config/site';
 
 function AuthLayout() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-brand-sand px-4 py-10">
-      <div className="grid w-full max-w-6xl overflow-hidden rounded-[32px] border border-white/50 bg-white shadow-panel lg:grid-cols-[1fr_1.15fr]">
-        <section className="hidden bg-brand p-10 text-white lg:flex lg:flex-col lg:justify-between">
-          <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-white/70">Hoa Sen Alumni</p>
-            <h1 className="mt-4 max-w-sm text-4xl font-semibold leading-tight text-white">
-              Không chỉ đăng nhập, mà còn là cổng kết nối cộng đồng cựu sinh viên.
-            </h1>
-          </div>
-          <p className="max-w-md text-sm leading-7 text-white/80">
-            Giai đoạn đầu triển khai tập trung vào xác thực, hồ sơ cá nhân, Co-op, Job Matching và CMS nội dung Alumni.
-          </p>
-        </section>
-
-        <section className="p-6 sm:p-10">
-          <Link to="/" className="mb-8 inline-flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand text-lg font-bold text-white">
-              HSU
-            </div>
-            <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.25em] text-brand">Alumni</div>
-              <div className="text-sm font-semibold text-brand-ink">University Portal</div>
-            </div>
+    <div className='min-h-screen flex items-center justify-center bg-brand-sand px-4 py-10 bg-type-1'>
+      <div className='w-full max-w-xl flex items-center justify-center flex-col gap-6'>
+        <div className='flex gap-8'>
+          <Link to="/"> 
+            <BrandImage
+              src={siteMeta.brandAssets?.navbar?.compactLogo}
+              className="h-24"
+              fallback={<div className="">Alumni</div>}
+            />
           </Link>
-          <Outlet />
-        </section>
+
+          <Link to="/" className='flex items-center'> 
+            <BrandImage
+              src={siteMeta.brandAssets?.navbar?.alumniLogo}
+              className="h-20"
+              style={{ filter: 'brightness(0) invert(1)' }}
+              fallback={<div className="">Alumni</div>}
+            />
+          </Link>
+        </div>
+
+        <div className="w-full">
+          <div className="grid overflow-hidden rounded-[32px] border border-white/50 bg-white shadow-panel lg:grid-cols-[0fr_1.15fr]">
+            <div className="hidden bg-brand p-3 text-white lg:flex lg:flex-col lg:justify-between"></div>
+
+            <section className="p-4 sm:p-6 lg:p-7">
+              <Outlet />
+            </section>
+          </div>
+        </div>
       </div>
     </div>
   );

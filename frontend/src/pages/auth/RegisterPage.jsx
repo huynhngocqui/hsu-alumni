@@ -93,9 +93,7 @@ function RegisterPage() {
   return (
     <div>
       <AuthPageHeading
-        eyebrow="Đăng ký"
         title="Tạo tài khoản Alumni"
-        description="Luồng đăng ký hiện đã nối PeopleSoft lookup mock ở môi trường dev và validation schema-based để kiểm tra hồ sơ alumni trước khi gửi đăng ký."
       />
 
       <form className="mt-8 grid gap-5 md:grid-cols-2" onSubmit={onSubmit}>

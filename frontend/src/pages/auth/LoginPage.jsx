@@ -40,9 +40,7 @@ function LoginPage() {
   return (
     <div>
       <AuthPageHeading
-        eyebrow="Xác thực"
-        title="Đăng nhập tài khoản Alumni"
-        description="Sử dụng email cá nhân đã đăng ký để truy cập dashboard, hồ sơ và các tính năng matching."
+        title="Đăng nhập"
       />
 
       <form className="mt-8 space-y-5" onSubmit={onSubmit}>

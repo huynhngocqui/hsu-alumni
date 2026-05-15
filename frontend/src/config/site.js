@@ -14,7 +14,8 @@ export const siteMeta = {
     navbar: {
       defaultLogo: '/branding/navbar/logo-default.png',
       compactLogo: '/branding/navbar/logo-scrolled.png',
-      mobileLogo: '/branding/navbar/logo-default.png',
+      mobileLogo: '/branding/navbar/logo-scrolled.png',
+      alumniLogo: '/branding/navbar/Logo-Alumni.png',
     },
     footer: {
       brandLogo: '/branding/footer/footer-brand.png',

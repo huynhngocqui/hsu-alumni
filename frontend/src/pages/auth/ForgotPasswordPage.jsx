@@ -26,7 +26,6 @@ function ForgotPasswordPage() {
   return (
     <div>
       <AuthPageHeading
-        eyebrow="Quên mật khẩu"
         title="Khôi phục quyền truy cập"
         description="Nhập email cá nhân đã đăng ký để nhận link đặt lại mật khẩu."
       />

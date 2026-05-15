@@ -26,6 +26,15 @@ body {
     line-height: 1.5rem;
 }
 
+.bg-brand {
+    --tw-bg-opacity: 1;
+    background-color: #044a98;
+}
+
+.bg-type-1 {
+    background: url(https://talentnetwork.hoasen.edu.vn/wp-content/themes/ru-hsu_tuyendung/assets/img/bg-bl-type1.svg) center / 100% no-repeat, linear-gradient(to bottom, #024DA1 0%, #024DA1 50%, #F2F7FF 50%, #F2F7FF 100%);
+}
+
 @layer base {
   h1,
   h2,
