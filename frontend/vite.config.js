@@ -65,6 +65,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: '0.0.0.0',
+    allowedHosts: ['alumni.hoasen.edu.vn'],
     port: devPort,
     strictPort: true,
     watch: usePolling
